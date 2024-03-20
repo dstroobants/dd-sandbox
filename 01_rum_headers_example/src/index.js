@@ -5,8 +5,8 @@ import App from './App';
 import { datadogRum } from '@datadog/browser-rum';
 
 datadogRum.init({
-    applicationId: '<applicationId>',
-    clientToken: '<clientToken>',
+    applicationId: process.env.REACT_APP_APPLICATION_ID,
+    clientToken: process.env.REACT_APP_CLIENT_TOKEN,
     site: 'datadoghq.com',
     service: 'rum_headers_example',
     env: 'dev',
