@@ -1,0 +1,9 @@
+init_config:
+
+instances:
+  - host: "sqlserver,1433"
+    username: datadog
+    password: "D4t4dog!2024"
+    connector: odbc
+    driver: SQL Server
+    connection_string: "Trusted_Connection=yes"
