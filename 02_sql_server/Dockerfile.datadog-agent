@@ -1,18 +1,56 @@
+###################################################################################################
+# Install ODBC Drivers
+###################################################################################################
 # There is no microsoft odbc package for debian12 so we stick with 11 for now (documentation is wrong and outdated)
-FROM datadog/agent:7.52.0
+# https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver15&tabs=debian18-install%2Calpine17-install%2Cdebian8-install%2Credhat7-13-install%2Crhel7-offline#18
+FROM python:3-bullseye
 
-RUN if ! [[ "18.04 20.04 22.04 23.04 24.04" == *"$(lsb_release -rs)"* ]]; \
-then \
-    echo "Ubuntu $(lsb_release -rs) is not currently supported."; \
-    exit 1;  fi
+# Install SQL Server driver
+# https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver15&tabs=debian18-install%2Calpine17-install%2Cdebian8-install%2Credhat7-13-install%2Crhel7-offline
 
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc
+#Debian 9-11
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/trusted.gpg.d/microsoft.asc
 
-RUN curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
+#Debian 11
+RUN curl https://packages.microsoft.com/config/debian/11/prod.list | tee /etc/apt/sources.list.d/mssql-release.list
+RUN sed -i 's| signed-by=/usr/share/keyrings/microsoft-prod.gpg||' /etc/apt/sources.list.d/mssql-release.list \
+  && cat /etc/apt/sources.list.d/mssql-release.list
 
 RUN apt-get update
-RUN ACCEPT_EULA=Y apt-get install -y msodbcsql18 mssql-tools18
+RUN ACCEPT_EULA=Y apt-get install -y msodbcsql18
+# optional: for bcp and sqlcmd
+RUN ACCEPT_EULA=Y apt-get install -y mssql-tools18
 ENV PATH="$PATH:/opt/mssql-tools18/bin"
-
 # optional: for unixODBC development headers
-RUN apt-get install -y unixodbc-dev
+# optional: kerberos library for debian-slim distributions
+RUN apt-get install -y unixodbc-dev libgssapi-krb5-2
+
+###################################################################################################
+# Install Datadog Agent
+###################################################################################################
+
+RUN DD_API_KEY=<INSERT_API_KEY> \
+    DD_SITE="datadoghq.com" \
+    DD_AGENT_MAJOR_VERSION=7 \
+    DD_AGENT_MINOR_VERSION=52 \
+    DD_INSTALL_ONLY=true \
+    bash -c "$(curl -L https://install.datadoghq.com/scripts/install_script_agent7.sh)"
+
+# For whatever reason, the security-agent.yaml file is missing when installing on debian
+# https://github.com/DataDog/datadog-agent/issues/14836
+RUN cp /etc/datadog-agent/security-agent.yaml.example /etc/datadog-agent/security-agent.yaml \
+    && chmod 755 /etc/datadog-agent/security-agent.yaml
+
+# Update Datadog agent to activate log collection
+RUN sed -i 's/# logs_enabled: false/logs_enabled: true/' /etc/datadog-agent/datadog.yaml
+RUN sed -i 's/# hostname: <HOSTNAME_NAME>/hostname: sql-server-agent-integration/' /etc/datadog-agent/datadog.yaml
+
+# Copy sqlserver.d integration
+COPY /conf.d/sqlserver.d/conf.yaml /etc/datadog-agent/conf.d/sqlserver.d/conf.yaml
+
+# https://docs.datadoghq.com/integrations/sqlserver/?tab=host#linux
+RUN cp /etc/odbc.ini /opt/datadog-agent/embedded/etc/odbc.ini
+RUN cp /etc/odbcinst.ini /opt/datadog-agent/embedded/etc/obdcinst.ini
+
+# We do that to keep the container alive and the datadog-agent service running
+CMD service datadog-agent start && tail -f /dev/null

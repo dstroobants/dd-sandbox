@@ -35,10 +35,20 @@ GO
 USE master;
 GO
 
-CREATE LOGIN datadog WITH PASSWORD = 'D4t4dog!2024';
+CREATE LOGIN datadog WITH PASSWORD = 'D4t4dog!2024', DEFAULT_DATABASE = sample_db;
 CREATE USER datadog FOR LOGIN datadog;
 GRANT SELECT on sys.dm_os_performance_counters to datadog;
 GRANT VIEW SERVER STATE to datadog;
 GRANT CONNECT ANY DATABASE to datadog;
 GRANT VIEW ANY DEFINITION to datadog;
+GO
+
+-- Custom Queries, create and grant access to the orders table in the sample_db database.
+USE sample_db;
+GO
+
+CREATE USER datadog FOR LOGIN datadog;
+
+-- Grant SELECT permission on the orders table to the datadog user
+GRANT SELECT ON dbo.orders TO datadog;
 GO

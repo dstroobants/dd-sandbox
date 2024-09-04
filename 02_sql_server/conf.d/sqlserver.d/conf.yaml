@@ -1,9 +1,20 @@
 init_config:
 
 instances:
-  - host: "sqlserver,1433"
+  - host: 'sqlserver,1433'
     username: datadog
-    password: "D4t4dog!2024"
+    password: D4t4dog!2024
     connector: odbc
-    driver: SQL Server
-    connection_string: "Trusted_Connection=yes"
+    driver: /opt/microsoft/msodbcsql18/lib64/libmsodbcsql-18.4.so.1.1
+    connection_string: "TrustServerCertificate=yes;"
+    custom_queries:
+    - query: SELECT order_id, order_amount FROM sample_db.dbo.orders;
+      columns:
+        - name: order_id
+          type: gauge
+        - name: order_amount
+          type: count
+      tags:
+        - test:sqlserver
+      collection_interval: 30
+      metric_prefix: custom-sql
