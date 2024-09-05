@@ -32,7 +32,7 @@ RUN apt-get install -y unixodbc-dev libgssapi-krb5-2
 RUN DD_API_KEY=<INSERT_API_KEY> \
     DD_SITE="datadoghq.com" \
     DD_AGENT_MAJOR_VERSION=7 \
-    DD_AGENT_MINOR_VERSION=52 \
+    DD_AGENT_MINOR_VERSION=51 \
     DD_INSTALL_ONLY=true \
     bash -c "$(curl -L https://install.datadoghq.com/scripts/install_script_agent7.sh)"
 

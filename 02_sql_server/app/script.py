@@ -92,4 +92,4 @@ if __name__ == "__main__":
             #delete_oldest_order()
             index+=1
         # Wait for 30 seconds before the next iteration
-        time.sleep(30)
+        time.sleep(10)
