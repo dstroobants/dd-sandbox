@@ -16,5 +16,5 @@ instances:
           type: count
       tags:
         - test:sqlserver
-      collection_interval: 30
+      collection_interval: 5
       metric_prefix: sql-orders
