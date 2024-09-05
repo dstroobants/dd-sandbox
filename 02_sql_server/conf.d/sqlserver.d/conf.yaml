@@ -17,4 +17,4 @@ instances:
       tags:
         - test:sqlserver
       collection_interval: 30
-      metric_prefix: custom-sql
+      metric_prefix: sql-orders
