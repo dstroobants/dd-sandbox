@@ -35,7 +35,7 @@ GO
 USE master;
 GO
 
-CREATE LOGIN datadog WITH PASSWORD = 'D4t4dog!2024', DEFAULT_DATABASE = sample_db;
+CREATE LOGIN datadog WITH PASSWORD = 'D4t4dog-2024', DEFAULT_DATABASE = sample_db;
 CREATE USER datadog FOR LOGIN datadog;
 GRANT SELECT on sys.dm_os_performance_counters to datadog;
 GRANT VIEW SERVER STATE to datadog;

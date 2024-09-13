@@ -20,7 +20,6 @@ RUN apt-get update
 RUN ACCEPT_EULA=Y apt-get install -y msodbcsql18
 # optional: for bcp and sqlcmd
 RUN ACCEPT_EULA=Y apt-get install -y mssql-tools18
-ENV PATH="$PATH:/opt/mssql-tools18/bin"
 # optional: for unixODBC development headers
 # optional: kerberos library for debian-slim distributions
 RUN apt-get install -y unixodbc-dev libgssapi-krb5-2

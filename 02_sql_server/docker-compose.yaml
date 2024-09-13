@@ -5,6 +5,7 @@ services:
     container_name: sqlserver
     hostname: sqlserver
     environment:
+      PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/mssql-tools18/bin"
       MSSQL_SA_PASSWORD: "SA_Passw0rd"
       ACCEPT_EULA: "Y"
     ports:

@@ -3,7 +3,7 @@ init_config:
 instances:
   - host: 'sqlserver,1433'
     username: datadog
-    password: D4t4dog!2024
+    password: D4t4dog-2024
     connector: odbc
     driver: /opt/microsoft/msodbcsql18/lib64/libmsodbcsql-18.4.so.1.1
     connection_string: "TrustServerCertificate=yes;"
