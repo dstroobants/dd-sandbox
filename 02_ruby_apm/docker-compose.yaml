@@ -1,0 +1,28 @@
+services:
+  datadog-agent:
+    image: datadog/agent:latest
+    ports:
+      - "127.0.0.1:8126:8126/tcp"
+    env_file:
+      - ../.env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+    environment:
+      - DD_APM_ENABLED=true
+      - DD_LOGS_ENABLED=true
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+  
+  apm-ruby-app:
+    build: .
+    ports:
+      - "4567:4567"
+    environment:
+      - DD_AGENT_HOST=datadog-agent
+      - DD_LOGS_INJECTION=true
+      - DD_SERVICE=apm-ruby-test
+      - DD_ENV=test
+      - DD_VERSION=1.0.0
+    depends_on:
+      - datadog-agent
