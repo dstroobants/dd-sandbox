@@ -10,7 +10,7 @@ deploy:
 	kubectl apply -f service.yaml
 
 get-service:
-	kubectl get services flask-api
+	kubectl get service flask-api
 
 delete:
 	kubectl delete deployment flask-api
