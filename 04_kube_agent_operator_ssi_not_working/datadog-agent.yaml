@@ -7,12 +7,11 @@ spec:
     site: datadoghq.com
     tags:
       - "env:dev"
-    clusterName: docker-desktop
     credentials:
       apiSecret:
         secretName: datadog-secret
         keyName: api-key
-    logLevel: info
+    logLevel: debug
     kubelet:
       tlsVerify: false
   features:
@@ -21,6 +20,9 @@ spec:
         enabled: true
         targets:
           - name: "default-target"
+            namespaceSelector:
+              matchNames:
+                - "default"
             ddTraceVersions:
               java: "1"
               python: "3"

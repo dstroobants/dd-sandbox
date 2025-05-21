@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: flask-api-deployment
+  name: flask-api
   labels:
     app: flask-api
 spec:
@@ -13,9 +13,21 @@ spec:
     metadata:
       labels:
         app: flask-api
+        tags.datadoghq.com/env: "dev"
+        tags.datadoghq.com/service: "flask-api"
+        tags.datadoghq.com/version: "1.0"
+        admission.datadoghq.com/enabled: "true"
+      annotations:
+        admission.datadoghq.com/python-lib.version: v3.7.1
     spec:
       containers:
-      - name: flask-app-container
-        image: denistroob89/flask-api-dev:latest
+      - name: flask-api
+        image: flask-api-dev:latest
+        imagePullPolicy: Never
+        env:
+          - name: DD_LOGS_INJECTION
+            value: "true"
+          - name: DD_APM_INSTRUMENTATION_DEBUG
+            value: "true"
         ports:
         - containerPort: 5000

@@ -1,0 +1,20 @@
+apiVersion: datadoghq.com/v2alpha1
+kind: DatadogAgent
+metadata:
+  name: datadog
+spec:
+  global:
+    site: datadoghq.com
+    tags:
+      - "env:dev"
+    credentials:
+      apiSecret:
+        secretName: datadog-secret
+        keyName: api-key
+    logLevel: info
+    kubelet:
+      tlsVerify: false
+  features:
+    logCollection:
+      enabled: true
+      containerCollectAll: true
