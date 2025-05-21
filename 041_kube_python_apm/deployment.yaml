@@ -1,0 +1,30 @@
+# flask-app-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-api-deployment
+  labels:
+    app: flask-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-api
+  template:
+    metadata:
+      labels:
+        app: flask-api
+    spec:
+      containers:
+      - name: flask-app-container
+        image: denistroob89/flask-api-dev:latest
+        ports:
+        - containerPort: 5000
+        # Optional: Add resource limits/requests for production
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
