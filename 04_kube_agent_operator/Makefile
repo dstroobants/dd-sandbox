@@ -9,7 +9,7 @@ update:
 
 # Install Datadog Operator
 # Create secret with Datadog API and APP keys
-# Apply Datadog Agent
+# Apply Datadog operator/agent configuration
 install:
 	@if ! helm list -q | grep -q "^dev-datadog-operator$$"; then \
 		helm install dev-datadog-operator datadog/datadog-operator; \
@@ -24,3 +24,7 @@ install:
 # Upgrade Datadog Operator with new values
 upgrade:
 	kubectl apply -f datadog-agent.yaml
+
+delete:
+	kubectl delete datadogagent datadog
+	helm delete dev-datadog-operator
