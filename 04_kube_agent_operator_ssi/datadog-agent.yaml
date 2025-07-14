@@ -20,9 +20,6 @@ spec:
         enabled: true
         targets:
           - name: "default-target"
-            namespaceSelector:
-              matchNames:
-                - "default"
             ddTraceVersions:
               java: "1"
               python: "3"

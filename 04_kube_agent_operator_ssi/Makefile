@@ -12,7 +12,7 @@ update:
 # Apply Datadog operator/agent configuration
 install:
 	@if ! helm list -q | grep -q "^dev-datadog-operator$$"; then \
-		helm install dev-datadog-operator datadog/datadog-operator; \
+		helm install datadog-operator datadog/datadog-operator; \
 	fi
 	@if ! kubectl get secret datadog-secret >/dev/null 2>&1; then \
 		kubectl create secret generic datadog-secret \
@@ -27,4 +27,4 @@ upgrade:
 
 delete:
 	kubectl delete datadogagent datadog
-	helm delete dev-datadog-operator
+	helm delete datadog-operator

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rails-app
+  labels:
+    app: rails-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rails-app
+  template:
+    metadata:
+      labels:
+        app: rails-app
+        tags.datadoghq.com/env: "dev"
+        tags.datadoghq.com/service: "rails-app"
+        tags.datadoghq.com/version: "1.0"
+    spec:
+      containers:
+      - name: rails-app
+        image: rails-app-dev:latest
+        imagePullPolicy: Never
+        env:
+          - name: DD_LOGS_INJECTION
+            value: "true"
+          - name: DD_APM_INSTRUMENTATION_DEBUG
+            value: "true"
+          - name: DD_AGENT_HOST
+            value: datadog-agent
+        ports:
+        - containerPort: 3000
