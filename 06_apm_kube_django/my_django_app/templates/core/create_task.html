@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Create New Task{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Create New Task</h1>
+    <a href="{% url 'task_list' %}" class="btn btn-outline-primary">Back to Tasks</a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Task Title *</label>
+                        <input type="text" class="form-control" id="title" name="title" required maxlength="200">
+                        <div class="form-text">Enter a clear, descriptive title for your task.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="5" placeholder="Provide more details about this task..."></textarea>
+                        <div class="form-text">Optional: Add more details about what needs to be done.</div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'task_list' %}" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Create Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Tips</h5>
+                <ul>
+                    <li>Use clear, actionable titles</li>
+                    <li>Include relevant details in the description</li>
+                    <li>You can edit tasks after creation</li>
+                    <li>Mark tasks as completed when done</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

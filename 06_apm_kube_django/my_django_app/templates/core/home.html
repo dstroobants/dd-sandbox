@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-primary text-white rounded p-5 mb-4">
+    <h1 class="display-4">{{ title }}</h1>
+    <p class="lead">{{ message }}</p>
+    <hr class="my-4">
+    <p>This Django application includes:</p>
+    <ul>
+        <li>Task management system</li>
+        <li>REST API endpoints</li>
+        <li>Admin interface</li>
+        <li>Health check endpoint</li>
+    </ul>
+    <a class="btn btn-light btn-lg" href="{% url 'task_list' %}" role="button">View Tasks</a>
+    <a class="btn btn-outline-light btn-lg" href="/admin/" role="button">Admin Panel</a>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Tasks</h5>
+                <p class="card-text">Manage your tasks with full CRUD operations.</p>
+                <a href="{% url 'task_list' %}" class="btn btn-primary">View Tasks</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">API</h5>
+                <p class="card-text">RESTful API endpoints for integration.</p>
+                <a href="{% url 'api_info' %}" class="btn btn-primary">API Info</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Health Check</h5>
+                <p class="card-text">Monitor application health status.</p>
+                <a href="{% url 'health_check' %}" class="btn btn-primary">Health Check</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
