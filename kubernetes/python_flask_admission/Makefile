@@ -4,6 +4,7 @@ export
 
 build:
 	docker build -t flask-api-dev:latest .
+	minikube image load flask-api-dev:latest
 
 deploy:
 	kubectl apply -f deployment.yaml
@@ -15,9 +16,3 @@ get-service:
 delete:
 	kubectl delete deployment flask-api
 	kubectl delete service flask-api
-
-build-locally:
-	eval $$(minikube docker-env)
-
-build-revert:
-	eval $$(minikube docker-env -u)

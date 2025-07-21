@@ -11,10 +11,22 @@ spec:
       apiSecret:
         secretName: datadog-secret
         keyName: api-key
-    logLevel: info
+    logLevel: debug
     kubelet:
       tlsVerify: false
   features:
+    apm:
+      instrumentation:
+        enabled: true
+        targets:
+          - name: "default-target"
+            ddTraceVersions:
+              java: "1"
+              python: "3"
+              js: "5"
+              php: "1"
+              dotnet: "3"
+              ruby: "2"
     logCollection:
       enabled: true
       containerCollectAll: true
