@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rails-app
+  labels:
+    app: rails-app
+    tags.datadoghq.com/env: "dev"
+    tags.datadoghq.com/service: "rails-app"
+    tags.datadoghq.com/version: "1.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rails-app
+  template:
+    metadata:
+      labels:
+        app: rails-app
+        tags.datadoghq.com/env: "dev"
+        tags.datadoghq.com/service: "rails-app"
+        tags.datadoghq.com/version: "1.0"
+        admission.datadoghq.com/enabled: "true"
+      annotations:
+        admission.datadoghq.com/ruby-lib.version: v2.18.0
+        admission.datadoghq.com/apm-inject.debug: "true"
+    spec:
+      containers:
+      - name: rails-app
+        image: rails-app-dev:latest
+        imagePullPolicy: Never
+        env:
+          - name: DD_LOGS_INJECTION
+            value: "true"
+        ports:
+        - containerPort: 3000
