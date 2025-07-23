@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app-fastify
+  labels:
+    app: node-app-fastify
+    tags.datadoghq.com/env: dev
+    tags.datadoghq.com/service: node-app-fastify
+    tags.datadoghq.com/version: "1234"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-app-fastify
+  template:
+    metadata:
+      labels:
+        app: node-app-fastify
+        tags.datadoghq.com/env: dev
+        tags.datadoghq.com/service: node-app-fastify
+        tags.datadoghq.com/version: "1234"
+        admission.datadoghq.com/enabled: "true"
+      annotations:
+        admission.datadoghq.com/js-lib.version: v5.57
+    spec:
+      containers:
+        - name: node-app-fastify
+          image: node-app-fastify:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3590
+          # Environment variables for Datadog APM instrumentation
+          env:
+            - name: DD_LOGS_INJECTION
+              value: "true"
+            # Datadog unified service tagging
+            - name: DD_ENV
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/env']
+            - name: DD_SERVICE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/service']
+            - name: DD_VERSION
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/version']
