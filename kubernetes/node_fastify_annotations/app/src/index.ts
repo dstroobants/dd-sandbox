@@ -6,6 +6,11 @@ server.get('/', async (request, reply) => {
   return 'hello\n'
 })
 
+server.get('/error', async (request, reply) => {
+  console.log('error')
+  throw new Error('test error')
+})
+
 server.listen({ port: 3590, host: '0.0.0.0' }, (err, address) => {
   if (err) {
     console.error(err)
