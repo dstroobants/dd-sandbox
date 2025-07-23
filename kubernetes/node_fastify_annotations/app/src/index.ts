@@ -3,10 +3,6 @@ import fastify from 'fastify'
 const server = fastify()
 
 server.get('/', async (request, reply) => {
-  return 'hello\n'
-})
-
-server.get('/error', async (request, reply) => {
   console.log('error')
   throw new Error('test error')
 })

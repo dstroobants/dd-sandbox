@@ -3,7 +3,7 @@
 ## Node App
 ########################################################
 node-build:
-	docker build -t node-app-fastify:latest .
+	docker build --no-cache -t node-app-fastify:latest .
 	minikube image load node-app-fastify:latest
 
 node-deploy:
