@@ -35,6 +35,8 @@ spec:
               value: "true"
             - name: DD_GIT_REPOSITORY_URL
               value: github.com/dstroobants/dd-sandbox
+            - name: DD_CODE_ORIGIN_FOR_SPANS_ENABLED
+              value: "true"
             # Datadog unified service tagging
             - name: DD_ENV
               valueFrom:
