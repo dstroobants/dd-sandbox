@@ -21,7 +21,7 @@ spec:
         tags.datadoghq.com/version: "1234"
         admission.datadoghq.com/enabled: "true"
       annotations:
-        admission.datadoghq.com/js-lib.version: v5.57
+        admission.datadoghq.com/js-lib.version: v5.60
     spec:
       containers:
         - name: node-app-fastify
