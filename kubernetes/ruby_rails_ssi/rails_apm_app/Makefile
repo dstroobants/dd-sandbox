@@ -4,7 +4,7 @@ export
 
 build:
 	docker build -t rails-app-dev:latest .
-	minikube image load rails-app-dev:latest
+	minikube image load --overwrite rails-app-dev:latest
 
 deploy:
 	kubectl apply -f deployment.yaml

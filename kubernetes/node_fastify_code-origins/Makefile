@@ -4,7 +4,7 @@
 ########################################################
 node-build:
 	docker build --no-cache -t node-app-fastify:latest .
-	minikube image load node-app-fastify:latest
+	minikube image load --overwrite node-app-fastify:latest
 
 node-deploy:
 	kubectl apply -f node-app-deployment.yaml

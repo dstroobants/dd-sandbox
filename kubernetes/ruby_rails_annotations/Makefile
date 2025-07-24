@@ -17,7 +17,7 @@ build-rails-app:
 
 build:
 	docker build --no-cache -t rails-app-dev:latest .
-	minikube image load rails-app-dev:latest
+	minikube image load --overwrite rails-app-dev:latest
 
 deploy:
 	kubectl apply -f deployment.yaml

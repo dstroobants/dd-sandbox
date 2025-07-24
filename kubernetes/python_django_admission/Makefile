@@ -39,7 +39,7 @@ agent-delete:
 ########################################################
 django-build:
 	docker build -t django-app:latest .
-	minikube image load django-app:latest
+	minikube image load --overwrite django-app:latest
 
 django-deploy:
 	kubectl apply -f django-app-deployment.yaml

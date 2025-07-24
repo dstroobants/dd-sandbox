@@ -4,7 +4,7 @@ export
 
 build:
 	docker build -t flask-api-dev:latest .
-	minikube image load flask-api-dev:latest
+	minikube image load --overwrite flask-api-dev:latest
 
 deploy:
 	kubectl apply -f deployment.yaml
