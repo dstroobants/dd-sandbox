@@ -1,3 +1,16 @@
+# How to use
+
+With minikube installed, cd into this directory: https://github.com/dstroobants/dd-sandbox/tree/main/kubernetes/node_fastify_code-origins
+Then, run in order:
+`make node build`
+`make node-deploy`
+`make node-connect`
+
+If you want to try a change, `make node-delete` and repeat the above.
+Library is injected on the deployment.yaml via admission.
+
+Once you have done make node-connect  you can navigate to the /error endpoint to throw an error
+
 # Hello World Express TypeScript Application
 
 A simple Node.js Express application built with TypeScript that provides a "Hello World" API endpoint.
