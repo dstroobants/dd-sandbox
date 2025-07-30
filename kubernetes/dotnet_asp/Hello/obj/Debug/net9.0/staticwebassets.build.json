@@ -1,0 +1,702 @@
+{
+  "Version": 1,
+  "Hash": "lbPgSnkT0TCwN4C9yMh2cM/OdsncYJguCzg+L2UNxH0=",
+  "Source": "DotNet.Docker",
+  "BasePath": "_content/DotNet.Docker",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "DotNet.Docker/wwwroot",
+      "Source": "DotNet.Docker",
+      "ContentRoot": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/wwwroot/",
+      "BasePath": "_content/DotNet.Docker",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/obj/Debug/net9.0/compressed/ccwbyhxpyh-x7jq2i8xyn.gz",
+      "SourceId": "DotNet.Docker",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/obj/Debug/net9.0/compressed/",
+      "BasePath": "_content/DotNet.Docker",
+      "RelativePath": "index#[.{fingerprint=x7jq2i8xyn}]?.html.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/wwwroot/index.html",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "ej39fdsujf",
+      "Integrity": "1oIeIS38d0Sk480fcewif6U2JCojkC04e8XZXpsxEKQ=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/wwwroot/index.html"
+    },
+    {
+      "Identity": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/obj/Debug/net9.0/compressed/hb6hw9itux-5uzn1072hj.gz",
+      "SourceId": "DotNet.Docker",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/obj/Debug/net9.0/compressed/",
+      "BasePath": "_content/DotNet.Docker",
+      "RelativePath": "styles#[.{fingerprint=5uzn1072hj}]?.css.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/wwwroot/styles.css",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "p0th4mrtei",
+      "Integrity": "18YYS+MBAPPicABYeAT2FHOBWo43mdKWLeAYqJUGSGM=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/wwwroot/styles.css"
+    },
+    {
+      "Identity": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/wwwroot/index.html",
+      "SourceId": "DotNet.Docker",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/wwwroot/",
+      "BasePath": "_content/DotNet.Docker",
+      "RelativePath": "index#[.{fingerprint}]?.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "x7jq2i8xyn",
+      "Integrity": "M5Ld6SfNjqvI13bNe5onvz677Zyt5WAhqf+KRqJB/i8=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/index.html"
+    },
+    {
+      "Identity": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/wwwroot/styles.css",
+      "SourceId": "DotNet.Docker",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/wwwroot/",
+      "BasePath": "_content/DotNet.Docker",
+      "RelativePath": "styles#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "5uzn1072hj",
+      "Integrity": "01lyGtFNenu9B1G+E5FcPoAWdemaNrW2AWS34yHEV6g=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/styles.css"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "index.html",
+      "AssetFile": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/obj/Debug/net9.0/compressed/ccwbyhxpyh-x7jq2i8xyn.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000498753117"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2004"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"1oIeIS38d0Sk480fcewif6U2JCojkC04e8XZXpsxEKQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Jul 2025 15:02:03 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"M5Ld6SfNjqvI13bNe5onvz677Zyt5WAhqf+KRqJB/i8=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-M5Ld6SfNjqvI13bNe5onvz677Zyt5WAhqf+KRqJB/i8="
+        }
+      ]
+    },
+    {
+      "Route": "index.html",
+      "AssetFile": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/wwwroot/index.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6622"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"M5Ld6SfNjqvI13bNe5onvz677Zyt5WAhqf+KRqJB/i8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Jul 2025 15:02:03 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-M5Ld6SfNjqvI13bNe5onvz677Zyt5WAhqf+KRqJB/i8="
+        }
+      ]
+    },
+    {
+      "Route": "index.html.gz",
+      "AssetFile": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/obj/Debug/net9.0/compressed/ccwbyhxpyh-x7jq2i8xyn.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2004"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"1oIeIS38d0Sk480fcewif6U2JCojkC04e8XZXpsxEKQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Jul 2025 15:02:03 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-1oIeIS38d0Sk480fcewif6U2JCojkC04e8XZXpsxEKQ="
+        }
+      ]
+    },
+    {
+      "Route": "index.x7jq2i8xyn.html",
+      "AssetFile": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/obj/Debug/net9.0/compressed/ccwbyhxpyh-x7jq2i8xyn.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000498753117"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2004"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"1oIeIS38d0Sk480fcewif6U2JCojkC04e8XZXpsxEKQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Jul 2025 15:02:03 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"M5Ld6SfNjqvI13bNe5onvz677Zyt5WAhqf+KRqJB/i8=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "x7jq2i8xyn"
+        },
+        {
+          "Name": "label",
+          "Value": "index.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-M5Ld6SfNjqvI13bNe5onvz677Zyt5WAhqf+KRqJB/i8="
+        }
+      ]
+    },
+    {
+      "Route": "index.x7jq2i8xyn.html",
+      "AssetFile": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/wwwroot/index.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6622"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"M5Ld6SfNjqvI13bNe5onvz677Zyt5WAhqf+KRqJB/i8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Jul 2025 15:02:03 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "x7jq2i8xyn"
+        },
+        {
+          "Name": "label",
+          "Value": "index.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-M5Ld6SfNjqvI13bNe5onvz677Zyt5WAhqf+KRqJB/i8="
+        }
+      ]
+    },
+    {
+      "Route": "index.x7jq2i8xyn.html.gz",
+      "AssetFile": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/obj/Debug/net9.0/compressed/ccwbyhxpyh-x7jq2i8xyn.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2004"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"1oIeIS38d0Sk480fcewif6U2JCojkC04e8XZXpsxEKQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Jul 2025 15:02:03 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "x7jq2i8xyn"
+        },
+        {
+          "Name": "label",
+          "Value": "index.html.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-1oIeIS38d0Sk480fcewif6U2JCojkC04e8XZXpsxEKQ="
+        }
+      ]
+    },
+    {
+      "Route": "styles.5uzn1072hj.css",
+      "AssetFile": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/obj/Debug/net9.0/compressed/hb6hw9itux-5uzn1072hj.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.002873563218"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "347"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"18YYS+MBAPPicABYeAT2FHOBWo43mdKWLeAYqJUGSGM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Jul 2025 15:02:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"01lyGtFNenu9B1G+E5FcPoAWdemaNrW2AWS34yHEV6g=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "5uzn1072hj"
+        },
+        {
+          "Name": "label",
+          "Value": "styles.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-01lyGtFNenu9B1G+E5FcPoAWdemaNrW2AWS34yHEV6g="
+        }
+      ]
+    },
+    {
+      "Route": "styles.5uzn1072hj.css",
+      "AssetFile": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/wwwroot/styles.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "897"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"01lyGtFNenu9B1G+E5FcPoAWdemaNrW2AWS34yHEV6g=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Jul 2025 15:02:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "5uzn1072hj"
+        },
+        {
+          "Name": "label",
+          "Value": "styles.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-01lyGtFNenu9B1G+E5FcPoAWdemaNrW2AWS34yHEV6g="
+        }
+      ]
+    },
+    {
+      "Route": "styles.5uzn1072hj.css.gz",
+      "AssetFile": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/obj/Debug/net9.0/compressed/hb6hw9itux-5uzn1072hj.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "347"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"18YYS+MBAPPicABYeAT2FHOBWo43mdKWLeAYqJUGSGM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Jul 2025 15:02:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "5uzn1072hj"
+        },
+        {
+          "Name": "label",
+          "Value": "styles.css.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-18YYS+MBAPPicABYeAT2FHOBWo43mdKWLeAYqJUGSGM="
+        }
+      ]
+    },
+    {
+      "Route": "styles.css",
+      "AssetFile": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/obj/Debug/net9.0/compressed/hb6hw9itux-5uzn1072hj.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.002873563218"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "347"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"18YYS+MBAPPicABYeAT2FHOBWo43mdKWLeAYqJUGSGM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Jul 2025 15:02:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"01lyGtFNenu9B1G+E5FcPoAWdemaNrW2AWS34yHEV6g=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-01lyGtFNenu9B1G+E5FcPoAWdemaNrW2AWS34yHEV6g="
+        }
+      ]
+    },
+    {
+      "Route": "styles.css",
+      "AssetFile": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/wwwroot/styles.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "897"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"01lyGtFNenu9B1G+E5FcPoAWdemaNrW2AWS34yHEV6g=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Jul 2025 15:02:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-01lyGtFNenu9B1G+E5FcPoAWdemaNrW2AWS34yHEV6g="
+        }
+      ]
+    },
+    {
+      "Route": "styles.css.gz",
+      "AssetFile": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/obj/Debug/net9.0/compressed/hb6hw9itux-5uzn1072hj.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "347"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"18YYS+MBAPPicABYeAT2FHOBWo43mdKWLeAYqJUGSGM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Jul 2025 15:02:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-18YYS+MBAPPicABYeAT2FHOBWo43mdKWLeAYqJUGSGM="
+        }
+      ]
+    }
+  ]
+}

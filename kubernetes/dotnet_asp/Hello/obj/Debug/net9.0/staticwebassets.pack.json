@@ -1,0 +1,33 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/wwwroot/index.html",
+      "PackagePath": "staticwebassets/index.html"
+    },
+    {
+      "Id": "/Users/denis.stroobants/git/dd-sandbox/kubernetes/dotnet_hello_world/Hello/wwwroot/styles.css",
+      "PackagePath": "staticwebassets/styles.css"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.DotNet.Docker.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.DotNet.Docker.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.build.DotNet.Docker.props",
+      "PackagePath": "build\\DotNet.Docker.props"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.buildMultiTargeting.DotNet.Docker.props",
+      "PackagePath": "buildMultiTargeting\\DotNet.Docker.props"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.buildTransitive.DotNet.Docker.props",
+      "PackagePath": "buildTransitive\\DotNet.Docker.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

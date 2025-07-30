@@ -1,0 +1,55 @@
+/* Additional styles for the spiced up .NET app */
+
+.theme-dark {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+}
+
+.theme-dark .container {
+    background: #34495e;
+    color: white;
+}
+
+.theme-dark .feature {
+    background: #2c3e50;
+    color: white;
+}
+
+.theme-dark .api-section {
+    background: #2c3e50;
+}
+
+.theme-dark .response {
+    background: #1a252f;
+    color: #ecf0f1;
+}
+
+/* Animations */
+@keyframes slideInFromLeft {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromRight {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.slide-in-left {
+    animation: slideInFromLeft 0.5s ease;
+}
+
+.slide-in-right {
+    animation: slideInFromRight 0.5s ease;
+}
