@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-laravel
+  labels:
+    app: php-laravel
+    tags.datadoghq.com/env: dev
+    tags.datadoghq.com/service: php-laravel
+    tags.datadoghq.com/version: "1234"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: php-laravel
+  template:
+    metadata:
+      labels:
+        app: php-laravel
+        tags.datadoghq.com/env: dev
+        tags.datadoghq.com/service: php-laravel
+        tags.datadoghq.com/version: "1234"
+        admission.datadoghq.com/enabled: "true"
+      annotations:
+        admission.datadoghq.com/php-lib.version: v1.11.0
+        admission.datadoghq.com/apm-inject.debug: "true"
+    spec:
+      containers:
+        - name: php-laravel
+          image: php-laravel-react:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
+          # Environment variables for Datadog APM instrumentation
+          env:
+            - name: DD_LOGS_INJECTION
+              value: "true"
+            # Datadog unified service tagging
+            - name: DD_ENV
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/env']
+            - name: DD_SERVICE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/service']
+            - name: DD_VERSION
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/version']
+          # Health checks
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          # Resource limits
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
