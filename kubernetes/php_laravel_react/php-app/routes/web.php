@@ -12,6 +12,22 @@ Route::get('/health', function () {
     ], 200);
 })->name('health');
 
+Route::get('/testing/test1', function () {
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now()->toISOString(),
+        'service' => 'laravel-app'
+    ], 200);
+})->name('test1');
+
+Route::get('/testing/test2', function () {
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now()->toISOString(),
+        'service' => 'laravel-app'
+    ], 200);
+})->name('test2');
+
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');

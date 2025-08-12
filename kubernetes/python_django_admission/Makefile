@@ -38,7 +38,7 @@ agent-delete:
 ## Django App
 ########################################################
 django-build:
-	docker build -t django-app:latest .
+	docker build --no-cache -t django-app:latest .
 	minikube image load --overwrite django-app:latest
 
 django-deploy:
