@@ -4,9 +4,6 @@ metadata:
   name: rails-app
   labels:
     app: rails-app
-    tags.datadoghq.com/env: "dev"
-    tags.datadoghq.com/service: "rails-app"
-    tags.datadoghq.com/version: "1.0"
 spec:
   replicas: 1
   selector:
@@ -18,7 +15,7 @@ spec:
         app: rails-app
         tags.datadoghq.com/env: "dev"
         tags.datadoghq.com/service: "rails-app"
-        tags.datadoghq.com/version: "1.0"
+        tags.datadoghq.com/version: "1234"
         admission.datadoghq.com/enabled: "true"
       annotations:
         admission.datadoghq.com/ruby-lib.version: v2.18.0
@@ -31,5 +28,29 @@ spec:
         env:
           - name: DD_LOGS_INJECTION
             value: "true"
+          - name: DD_APM_INSTRUMENTATION_DEBUG
+            value: "true"
+          - name: DD_AGENT_HOST
+            value: datadog-agent
+          - name: ENABLE_API_REQUESTS
+            value: "true"
+          - name: RAILS_ENV
+            value: "development"
         ports:
         - containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /up
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /up
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3

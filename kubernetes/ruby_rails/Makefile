@@ -1,7 +1,4 @@
 #!make
-include ../../.env
-export
-
 build:
 	docker build -t rails-app-dev:latest .
 	minikube image load --overwrite rails-app-dev:latest
