@@ -31,6 +31,9 @@ curl http://localhost:3000
 
 # View traces in Datadog dashboard
 # https://app.datadoghq.com/apm/traces
+
+# Clean up
+docker-compose down
 ```
 
 ## Checking trace data
