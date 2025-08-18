@@ -1,0 +1,41 @@
+services:
+  mysql:
+    image: mysql:8.0.28
+    platform: linux/x86_64
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_USER: develop
+      MYSQL_PASSWORD: develop
+    volumes:
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    ports:
+      - ${MYSQL_PORT:-3306}:3306
+    command: --bind-address=0.0.0.0 --default-authentication-plugin=mysql_native_password
+
+  datadog-agent:
+    image: gcr.io/datadoghq/agent:7
+    container_name: dd-agent
+    environment:
+      - DD_API_KEY=${DD_API_KEY:-your_api_key_here}
+      - DD_SITE=datadoghq.com
+      - DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true
+      - DD_ENV=dev
+      - DD_APM_ENABLED=true
+      - DD_APM_NON_LOCAL_TRAFFIC=true
+      - DD_APM_RECEIVER_SOCKET=/var/run/datadog/apm.socket
+      - DD_DOGSTATSD_SOCKET=/var/run/datadog/dsd.socket
+      - DD_LOGS_ENABLED=true
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+      - DD_CONTAINER_EXCLUDE_LOGS=name:dd-agent
+    volumes:
+      - /var/run/datadog:/var/run/datadog
+      - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    ports:
+      - 8125:8125/udp  # DogStatsD
+      - 8126:8126      # APM
+    depends_on:
+      - mysql
