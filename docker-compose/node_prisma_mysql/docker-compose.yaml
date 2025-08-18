@@ -1,0 +1,22 @@
+services:
+  mysql:
+    image: mysql:9
+    container_name: node_prisma_mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: node_prisma_db
+      MYSQL_USER: prisma
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "prisma", "-ppassword"]
+      timeout: 20s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  mysql_data:
