@@ -26,6 +26,7 @@ spec:
               js: "5"
               php: "1"
               dotnet: "3"
+              ruby: "2"
     logCollection:
       enabled: true
       containerCollectAll: true

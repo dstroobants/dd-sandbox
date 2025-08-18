@@ -10,8 +10,8 @@ deploy:
 	kubectl apply -f deployment.yaml
 	kubectl apply -f service.yaml
 
-get-service:
-	kubectl get service flask-api
+connect:
+	minikube service service flask-api
 
 delete:
 	kubectl delete deployment flask-api
