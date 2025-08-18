@@ -36,6 +36,8 @@ spec:
             value: "true"
           - name: RAILS_ENV
             value: "development"
+          - name: DD_REMOTE_CONFIGURATION_ENABLED
+            value: "true"
         ports:
         - containerPort: 3000
         livenessProbe:

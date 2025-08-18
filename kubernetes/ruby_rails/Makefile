@@ -7,8 +7,8 @@ deploy:
 	kubectl apply -f deployment.yaml
 	kubectl apply -f service.yaml
 
-get-service:
-	kubectl get service rails-app
+connect:
+	minikube service rails-app
 
 delete:
 	kubectl delete deployment rails-app
