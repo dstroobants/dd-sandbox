@@ -36,7 +36,10 @@ spec:
             value: "true"
           - name: RAILS_ENV
             value: "development"
+          # Needed for dev environments
           - name: DD_REMOTE_CONFIGURATION_ENABLED
+            value: "true"
+          - name: DD_TRACE_DEBUG
             value: "true"
         ports:
         - containerPort: 3000
