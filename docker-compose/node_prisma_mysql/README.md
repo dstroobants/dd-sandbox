@@ -4,7 +4,7 @@
 
 - Node.js: v22.14.0
 - Prisma: 6.12.0
-- dd-trace: 5.61.1
+- dd-trace: 5.63.3
 
 ## Steps to reproduce the issue
 
