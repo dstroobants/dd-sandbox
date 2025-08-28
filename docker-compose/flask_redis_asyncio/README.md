@@ -19,27 +19,34 @@ This application addresses the compatibility issue between ddtrace and redis-py 
 
 ## Quick Start
 
-1. **Start the application:**
+1. **Update the Datadog API KEY**
+   Update the file docker-compose.yaml file to point to a correct .env file with DD_API_KEY:
+   ```bash
+   env_file:
+     - ../../.env
+   ```
+
+2. **Start the application:**
    ```bash
    make up
    ```
 
-2. **Test the application:**
+3. **Test the application:**
    ```bash
    make test
    ```
 
-3. **Test pipeline operations specifically:**
+4. **Test pipeline operations specifically:**
    ```bash
    make test-pipelines
    ```
 
-4. **View logs:**
+5. **View logs:**
    ```bash
    make logs
    ```
 
-5. **Stop the application:**
+6. **Stop the application:**
    ```bash
    make down
    ```
