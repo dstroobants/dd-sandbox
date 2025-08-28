@@ -70,10 +70,13 @@ This application addresses the compatibility issue between ddtrace and redis-py 
 # Health check
 curl http://localhost:5000/health
 
-# Test synchronous pipeline
+# Check redis-py version and _command_stack compatibility
+curl http://localhost:5000/redis-info
+
+# Test synchronous pipeline (demonstrates the ddtrace/redis-py 6.4.0 issue)
 curl http://localhost:5000/test-pipeline
 
-# Test asynchronous pipeline (addresses the redis-py 6.4.0+ issue)
+# Test asynchronous pipeline (workaround for the compatibility issue)
 curl http://localhost:5000/test-async-pipeline
 
 # Set a value
@@ -87,9 +90,6 @@ curl http://localhost:5000/increment/counter
 
 # Run comprehensive test operations
 curl http://localhost:5000/test-operations
-
-# Get Redis server info
-curl http://localhost:5000/redis-info
 ```
 
 ## Services

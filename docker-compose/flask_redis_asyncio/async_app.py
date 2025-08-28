@@ -14,9 +14,11 @@ logger = logging.getLogger(__name__)
 
 # Initialize Datadog tracing - but be careful with redis patching
 # Due to compatibility issues with redis-py 6.2.0+, we'll handle tracing manually
+# The issue: ddtrace patches pipeline by relying on _command_stack attribute which was removed in redis-py 6.2.0+
 try:
     patch(redis=True)
-    logger.info("Datadog Redis patching enabled")
+    logger.info("Datadog Redis patching enabled - this may cause issues with redis-py 6.4.0+ pipelines")
+    logger.info("redis-py version 6.4.0 removed the _command_stack attribute that ddtrace relies on")
 except Exception as e:
     logger.warning(f"Datadog Redis patching failed: {e}. Manual tracing will be used.")
 
@@ -99,7 +101,7 @@ def increment_key(key):
 
 @app.route('/test-pipeline')
 def test_pipeline():
-    """Test synchronous Redis pipeline operations"""
+    """Test synchronous Redis pipeline operations - demonstrates redis-py 6.4.0 + ddtrace issue"""
     try:
         with tracer.trace("redis.pipeline", service="flask-redis-app") as span:
             pipe = redis_client.pipeline()
@@ -119,14 +121,22 @@ def test_pipeline():
             pipe.lpush("pipeline_list", f"item_{random.randint(1, 100)}")
             pipe.llen("pipeline_list")
             
+            # Check if _command_stack exists (it was removed in redis-py 6.2.0+)
+            has_command_stack = hasattr(pipe, '_command_stack')
+            logger.info(f"Pipeline has _command_stack attribute: {has_command_stack}")
+            
             # Execute pipeline
             results = pipe.execute()
             
             span.set_tag("redis.pipeline.operations", len(operations) + 3)
+            span.set_tag("redis.pipeline.has_command_stack", has_command_stack)
             
             return jsonify({
                 'status': 'success',
                 'type': 'synchronous_pipeline',
+                'redis_py_version': '6.4.0',
+                'has_command_stack_attribute': has_command_stack,
+                'ddtrace_compatibility_note': 'ddtrace relies on _command_stack which was removed in redis-py 6.2.0+',
                 'operations_queued': len(operations) + 3,
                 'operations': operations,
                 'results_count': len(results),
@@ -135,10 +145,13 @@ def test_pipeline():
             })
             
     except Exception as e:
+        logger.error(f"Pipeline error (likely due to ddtrace/redis-py 6.4.0 compatibility): {e}")
         return jsonify({
             'status': 'error',
             'type': 'synchronous_pipeline',
-            'error': str(e)
+            'error': str(e),
+            'redis_py_version': '6.4.0',
+            'compatibility_issue': 'This error may be caused by ddtrace trying to access _command_stack attribute removed in redis-py 6.2.0+'
         }), 500
 
 @app.route('/test-async-pipeline')
@@ -248,14 +261,30 @@ def test_operations():
 
 @app.route('/redis-info')
 def redis_info():
-    """Get Redis server information"""
+    """Get Redis server information and redis-py library details"""
     try:
         with tracer.trace("redis.info", service="flask-redis-app") as span:
             info = redis_client.info()
             span.set_tag("redis.version", info.get('redis_version', 'unknown'))
             
+            # Check redis-py version and _command_stack availability
+            import redis as redis_module
+            redis_py_version = getattr(redis_module, '__version__', 'unknown')
+            
+            # Test pipeline to check for _command_stack
+            test_pipe = redis_client.pipeline()
+            has_command_stack = hasattr(test_pipe, '_command_stack')
+            
+            logger.info(f"redis-py version: {redis_py_version}")
+            logger.info(f"Pipeline _command_stack attribute available: {has_command_stack}")
+            logger.info(f"ddtrace compatibility issue: {'Yes' if not has_command_stack else 'No'}")
+            
             return jsonify({
-                'redis_version': info.get('redis_version'),
+                'redis_server_version': info.get('redis_version'),
+                'redis_py_library_version': redis_py_version,
+                'pipeline_has_command_stack': has_command_stack,
+                'ddtrace_compatibility_issue': not has_command_stack,
+                'compatibility_explanation': 'ddtrace patches pipeline by accessing _command_stack attribute, removed in redis-py 6.2.0+',
                 'connected_clients': info.get('connected_clients'),
                 'used_memory_human': info.get('used_memory_human'),
                 'total_commands_processed': info.get('total_commands_processed'),
