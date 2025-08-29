@@ -22,6 +22,7 @@ spec:
         admission.datadoghq.com/enabled: "true"
       annotations:
         admission.datadoghq.com/python-lib.version: v3.10.1
+        admission.datadoghq.com/apm-inject.debug: "true"
     spec:
       containers:
         - name: django-app

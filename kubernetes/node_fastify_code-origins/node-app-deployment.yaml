@@ -22,6 +22,7 @@ spec:
         admission.datadoghq.com/enabled: "true"
       annotations:
         admission.datadoghq.com/js-lib.version: v5.60
+        admission.datadoghq.com/apm-inject.debug: "true"
     spec:
       containers:
         - name: node-app-fastify
