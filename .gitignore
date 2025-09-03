@@ -1,2 +1,6 @@
 .env
 .DS_Store
+terraform.tfstate
+.terraform
+.terraform.lock.hcl
+terraform.tfvars
