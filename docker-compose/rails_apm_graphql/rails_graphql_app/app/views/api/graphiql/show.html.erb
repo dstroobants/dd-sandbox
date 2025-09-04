@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GraphQL Playground</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: #f5f5f5;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        overflow: hidden;
+      }
+      .header {
+        background: #1f2937;
+        color: white;
+        padding: 20px;
+        text-align: center;
+      }
+      .playground {
+        display: flex;
+        height: 700px;
+      }
+      .query-section, .result-section {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+      }
+      .query-section {
+        border-right: 1px solid #e5e7eb;
+      }
+      textarea {
+        width: 100%;
+        height: 180px;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
+        padding: 12px;
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-size: 14px;
+        resize: vertical;
+        box-sizing: border-box;
+      }
+      .variables {
+        margin-top: 10px;
+      }
+      .variables textarea {
+        height: 80px;
+      }
+      button {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-top: 10px;
+      }
+      button:hover {
+        background: #2563eb;
+      }
+      pre {
+        background: #f3f4f6;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
+        padding: 12px;
+        height: 500px;
+        overflow: auto;
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-size: 14px;
+        box-sizing: border-box;
+      }
+      .examples {
+        margin-top: 10px;
+      }
+      .example-button {
+        background: #6b7280;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        padding: 5px 10px;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🚀 GraphQL Playground</h1>
+        <p>Test your GraphQL queries and mutations</p>
+      </div>
+      
+      <div class="playground">
+        <div class="query-section">
+          <h3>📝 Query</h3>
+          <textarea id="query" placeholder="Enter your GraphQL query here...">query {
+  hello
+  currentTime
+}</textarea>
+          
+          <div class="variables">
+            <h4>🔧 Variables (JSON)</h4>
+            <textarea id="variables" placeholder='{"key": "value"}'>{}</textarea>
+          </div>
+          
+          <button type="button" id="execute-btn" onclick="executeQuery()">▶️ Execute Query</button>
+          
+          <div class="examples">
+            <h4>💡 Examples:</h4>
+            <button type="button" class="example-button" onclick="loadExample('hello')">👋 Hello</button>
+            <button type="button" class="example-button" onclick="loadExample('echo')">🔊 Echo</button>
+            <button type="button" class="example-button" onclick="loadExample('mutation')">✏️ Mutation</button>
+          </div>
+        </div>
+        
+        <div class="result-section">
+          <h3>📊 Result</h3>
+          <pre id="result">Execute a query to see results here...</pre>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const examples = {
+        hello: {
+          query: `query {
+  hello
+  currentTime
+}`,
+          variables: '{}'
+        },
+        echo: {
+          query: `query EchoMessage($message: String!) {
+  echo(message: $message)
+}`,
+          variables: '{"message": "Hello GraphQL!"}'
+        },
+        mutation: {
+          query: `mutation CreateSample($name: String!) {
+  createSample(name: $name)
+  updateMessage(message: "Sample created")
+}`,
+          variables: '{"name": "Test Sample"}'
+        }
+      };
+
+      function loadExample(type) {
+        const example = examples[type];
+        document.getElementById('query').value = example.query;
+        document.getElementById('variables').value = example.variables;
+      }
+
+      async function executeQuery() {
+        const query = document.getElementById('query').value;
+        const variablesText = document.getElementById('variables').value;
+        const resultElement = document.getElementById('result');
+        
+        let variables = {};
+        try {
+          variables = JSON.parse(variablesText || '{}');
+        } catch (e) {
+          resultElement.textContent = 'Invalid JSON in variables: ' + e.message;
+          return;
+        }
+
+        resultElement.textContent = 'Executing...';
+
+        try {
+          const response = await fetch('<%= api_graphiql_execute_path %>', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+              query: query,
+              variables: variables
+            })
+          });
+
+          const result = await response.json();
+          resultElement.textContent = JSON.stringify(result, null, 2);
+        } catch (error) {
+          resultElement.textContent = 'Error: ' + error.message;
+        }
+      }
+
+      // Load default example and test JavaScript
+      console.log('GraphQL Playground loaded');
+      loadExample('hello');
+      
+      // Test that elements exist
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded');
+        console.log('Query textarea:', document.getElementById('query'));
+        console.log('Execute button:', document.getElementById('execute-btn'));
+        console.log('Result pre:', document.getElementById('result'));
+      });
+    </script>
+  </body>
+</html>
