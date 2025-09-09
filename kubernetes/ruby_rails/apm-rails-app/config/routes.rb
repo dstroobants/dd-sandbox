@@ -12,6 +12,10 @@ Rails.application.routes.draw do
   # API endpoints for testing
   get "api/trigger" => "api#trigger_request"
   get "api/status" => "api#status"
+  
+  # Additional routes for liveness probes to simulate traffic
+  get "api/health/database" => "api#database_health"
+  get "api/health/services" => "api#services_health"
 
   # Defines the root path route ("/")
   # root "posts#index"
