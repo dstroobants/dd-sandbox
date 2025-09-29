@@ -1,95 +1,208 @@
-using System;
-using System.Threading;
-using Microsoft.Data.SqlClient;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using HelloWorld.Data;
+using HelloWorld.Services;
+using HelloWorld.Interceptors;
+using System.Linq;
 
 namespace HelloWorld
 {
     class Program
     {
-        private static readonly string ConnectionString = "Server=mssql,1433;Database=TestDB;User Id=sa;Password=Password123!;TrustServerCertificate=true;";
-        
         static async Task Main(string[] args)
         {
-            Console.WriteLine("🚀 Hello World from .NET 8 with SQL Server!");
+            Console.WriteLine("🚀 Hello World from .NET 8 with Entity Framework Core 9.0!");
             Console.WriteLine($"Current Time: {DateTime.Now}");
             Console.WriteLine("Application is starting...");
+
+            // Create host builder with dependency injection
+            var host = Host.CreateDefaultBuilder(args)
+                .ConfigureServices((context, services) =>
+                {
+                    // Register the query analysis interceptor
+                    services.AddScoped<QueryAnalysisInterceptor>();
+                    
+                    // Configure Entity Framework with interceptor
+                    services.AddDbContext<TestDbContext>((serviceProvider, options) =>
+                    {
+                        var interceptor = serviceProvider.GetRequiredService<QueryAnalysisInterceptor>();
+                        options.UseSqlServer(
+                            "Server=mssql,1433;Database=TestDB;User Id=sa;Password=Password123!;TrustServerCertificate=true;",
+                            sqlOptions => sqlOptions.EnableRetryOnFailure(
+                                maxRetryCount: 10,
+                                maxRetryDelay: TimeSpan.FromSeconds(30),
+                                errorNumbersToAdd: null)
+                        )
+                        .AddInterceptors(interceptor)
+                        .EnableSensitiveDataLogging() // Show parameter values in logs
+                        .EnableDetailedErrors(); // More detailed error messages
+                    });
+                    
+                    // Register services
+                    services.AddScoped<IUserService, UserService>();
+                    services.AddScoped<IQueryAnalysisService, QueryAnalysisService>();
+                    services.AddHostedService<UserQueryService>();
+                })
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
+                    // Set detailed logging for Entity Framework
+                    logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Information);
+                    logging.AddFilter("Microsoft.EntityFrameworkCore.Query", LogLevel.Information);
+                    logging.AddFilter("HelloWorld.Interceptors.QueryAnalysisInterceptor", LogLevel.Information);
+                    logging.SetMinimumLevel(LogLevel.Debug);
+                })
+                .Build();
+
+            // Start the application
+            await host.RunAsync();
+        }
+    }
+    
+    // Background service to handle the periodic querying
+    public class UserQueryService : BackgroundService
+    {
+        private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly ILogger<UserQueryService> _logger;
+        private int _queryCounter = 0;
+
+        public UserQueryService(IServiceScopeFactory serviceScopeFactory, ILogger<UserQueryService> logger)
+        {
+            _serviceScopeFactory = serviceScopeFactory;
+            _logger = logger;
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            // Wait for database to be ready
+            await WaitForDatabaseAsync(stoppingToken);
             
-            // Wait for SQL Server to be ready
-            await WaitForSqlServer();
-            
-            Console.WriteLine("Connected to SQL Server successfully!");
-            Console.WriteLine("Starting user query loop...");
-            
-            // Keep the application running and query database every 5 seconds
-            int counter = 0;
-            while (true)
+            _logger.LogInformation("Connected to SQL Server successfully!");
+            _logger.LogInformation("Starting user query loop...");
+
+            // Query database every 5 seconds
+            while (!stoppingToken.IsCancellationRequested)
             {
-                counter++;
-                await QueryAndLogUsers(counter);
-                Thread.Sleep(5000); // Wait 5 seconds
+                _queryCounter++;
+                await QueryAndLogUsersAsync(_queryCounter);
+                await Task.Delay(5000, stoppingToken);
             }
         }
-        
-        private static async Task WaitForSqlServer()
+
+        private async Task WaitForDatabaseAsync(CancellationToken cancellationToken)
         {
-            int maxRetries = 30; // Wait up to 150 seconds
+            int maxRetries = 30;
             int retryCount = 0;
-            
-            while (retryCount < maxRetries)
+
+            while (retryCount < maxRetries && !cancellationToken.IsCancellationRequested)
             {
                 try
                 {
-                    using var connection = new SqlConnection(ConnectionString);
-                    await connection.OpenAsync();
-                    Console.WriteLine("✅ SQL Server connection established!");
+                    using var scope = _serviceScopeFactory.CreateScope();
+                    var dbContext = scope.ServiceProvider.GetRequiredService<TestDbContext>();
+                    
+                    // Test connection by checking if database can be reached
+                    await dbContext.Database.CanConnectAsync(cancellationToken);
+                    _logger.LogInformation("✅ SQL Server connection established!");
                     return;
                 }
                 catch (Exception ex)
                 {
                     retryCount++;
-                    Console.WriteLine($"⏳ Waiting for SQL Server... Attempt {retryCount}/{maxRetries}");
-                    Console.WriteLine($"   Error: {ex.Message}");
-                    Thread.Sleep(5000);
+                    _logger.LogInformation("⏳ Waiting for SQL Server... Attempt {RetryCount}/{MaxRetries}", retryCount, maxRetries);
+                    _logger.LogInformation("   Error: {Error}", ex.Message);
+                    await Task.Delay(5000, cancellationToken);
                 }
             }
-            
-            throw new Exception("Could not connect to SQL Server after multiple attempts.");
+
+            throw new InvalidOperationException("Could not connect to SQL Server after multiple attempts.");
         }
-        
-        private static async Task QueryAndLogUsers(int queryNumber)
+
+        private async Task QueryAndLogUsersAsync(int queryNumber)
         {
             try
             {
-                using var connection = new SqlConnection(ConnectionString);
-                await connection.OpenAsync();
-                
-                string query = "SELECT Id, FirstName, LastName, Email, CreatedDate FROM Users ORDER BY Id";
-                using var command = new SqlCommand(query, connection);
-                using var reader = await command.ExecuteReaderAsync();
-                
-                Console.WriteLine($"\n[{DateTime.Now:HH:mm:ss}] === Query #{queryNumber} Results ===");
-                
-                if (!reader.HasRows)
+                using var scope = _serviceScopeFactory.CreateScope();
+                var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
+
+                // Every 3rd query, get detailed analysis with execution plan
+                bool useDetailedAnalysis = queryNumber % 3 == 0;
+
+                if (useDetailedAnalysis)
                 {
-                    Console.WriteLine("No users found in database.");
+                    Console.WriteLine($"\n[{DateTime.Now:HH:mm:ss}] === 🔍 DETAILED QUERY ANALYSIS #{queryNumber} (EF Core) ===");
+                    
+                    var analysis = await userService.GetUsersWithAnalysisAsync();
+                    
+                    // Display users
+                    if (analysis.Users.Count == 0)
+                    {
+                        Console.WriteLine("No users found in database.");
+                    }
+                    else
+                    {
+                        for (int i = 0; i < analysis.Users.Count; i++)
+                        {
+                            var user = analysis.Users[i];
+                            Console.WriteLine($"  User {i + 1}: {user.FirstName} {user.LastName} ({user.Email}) - Created: {user.CreatedDate}");
+                        }
+                        Console.WriteLine($"Total users retrieved: {analysis.Users.Count}");
+                    }
+
+                    // Display performance metrics
+                    Console.WriteLine("\n📊 === PERFORMANCE ANALYSIS ===");
+                    Console.WriteLine($"⏱️  Execution Time: {analysis.ExecutionTimeMs}ms");
+                    Console.WriteLine($"📅 Query Timestamp: {analysis.Timestamp:yyyy-MM-dd HH:mm:ss} UTC");
+                    Console.WriteLine($"📝 Query: {analysis.QueryText}");
+                    
+                    // Display execution plan summary
+                    if (analysis.ExecutionPlan.Any())
+                    {
+                        Console.WriteLine("\n🎯 === EXECUTION PLAN SUMMARY ===");
+                        foreach (var plan in analysis.ExecutionPlan.Take(3)) // Show top 3 operations
+                        {
+                            if (!string.IsNullOrEmpty(plan.PhysicalOp))
+                            {
+                                Console.WriteLine($"  • Operation: {plan.PhysicalOp} | Cost: {plan.TotalSubtreeCost} | Est.Rows: {plan.EstimateRows}");
+                            }
+                        }
+                    }
+                    
+                    Console.WriteLine("=== End Detailed Analysis ===\n");
                 }
                 else
                 {
-                    int userCount = 0;
-                    while (await reader.ReadAsync())
+                    // Regular query with performance tracking
+                    Console.WriteLine($"\n[{DateTime.Now:HH:mm:ss}] === Query #{queryNumber} Results (EF Core) ===");
+                    
+                    var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+                    var users = await userService.GetAllUsersAsync();
+                    stopwatch.Stop();
+
+                    if (users.Count == 0)
                     {
-                        userCount++;
-                        Console.WriteLine($"  User {userCount}: {reader["FirstName"]} {reader["LastName"]} ({reader["Email"]}) - Created: {reader["CreatedDate"]}");
+                        Console.WriteLine("No users found in database.");
                     }
-                    Console.WriteLine($"Total users retrieved: {userCount}");
+                    else
+                    {
+                        for (int i = 0; i < users.Count; i++)
+                        {
+                            var user = users[i];
+                            Console.WriteLine($"  User {i + 1}: {user.FirstName} {user.LastName} ({user.Email}) - Created: {user.CreatedDate}");
+                        }
+                        Console.WriteLine($"Total users retrieved: {users.Count}");
+                    }
+                    
+                    Console.WriteLine($"⚡ Query executed in: {stopwatch.ElapsedMilliseconds}ms");
+                    Console.WriteLine("=== End Query Results ===\n");
                 }
-                
-                Console.WriteLine("=== End Query Results ===\n");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error querying database: {ex.Message}");
+                _logger.LogError(ex, "❌ Error querying database: {Error}", ex.Message);
             }
         }
     }
