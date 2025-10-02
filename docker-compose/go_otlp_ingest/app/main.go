@@ -5,32 +5,55 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
+	"go.opentelemetry.io/contrib/instrumentation/runtime"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
-	//stdout "go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
+	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/propagation"
+	sdkmetric "go.opentelemetry.io/otel/sdk/metric"
+	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	oteltrace "go.opentelemetry.io/otel/trace"
-
-	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 )
 
 var tracer = otel.Tracer("gin-server")
 
 func main() {
+	ctx := context.Background()
+	
 	tp, err := initTracer()
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer func() {
-		if err := tp.Shutdown(context.Background()); err != nil {
+		if err := tp.Shutdown(ctx); err != nil {
 			log.Printf("Error shutting down tracer provider: %v", err)
 		}
 	}()
+	
+	// Initialize metrics provider
+	mp, err := initMetrics()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func() {
+		if err := mp.Shutdown(ctx); err != nil {
+			log.Printf("Error shutting down metrics provider: %v", err)
+		}
+	}()
+	
+	// Start collecting runtime metrics
+	err = runtime.Start(runtime.WithMinimumReadMemStatsInterval(time.Second))
+	if err != nil {
+		log.Fatal(err)
+	}
+	
 	r := gin.New()
 	r.Use(otelgin.Middleware("my-server"))
 	tmplName := "user"
@@ -74,7 +97,7 @@ func makePeriodicRequest(url string, interval time.Duration) {
 func initTracer() (*sdktrace.TracerProvider, error) {
 	ctx := context.Background()
 	
-	// Create OTLP gRPC exporter
+	// Create OTLP gRPC exporter for traces
 	exporter, err := otlptracegrpc.New(ctx,
 		otlptracegrpc.WithInsecure(),
 	)
@@ -91,13 +114,55 @@ func initTracer() (*sdktrace.TracerProvider, error) {
 	return tp, nil
 }
 
+func initMetrics() (*sdkmetric.MeterProvider, error) {
+	ctx := context.Background()
+	
+	// Get service name from environment
+	serviceName := os.Getenv("OTEL_SERVICE_NAME")
+	if serviceName == "" {
+		serviceName = "go-web-app"
+	}
+	
+	// Create resource with service information
+	res, err := resource.New(ctx,
+		resource.WithAttributes(
+			attribute.String("service.name", serviceName),
+			attribute.String("service.version", os.Getenv("DD_VERSION")),
+			attribute.String("deployment.environment", os.Getenv("DD_ENV")),
+		),
+	)
+	if err != nil {
+		return nil, err
+	}
+	
+	// Create OTLP gRPC exporter for metrics
+	exporter, err := otlpmetricgrpc.New(ctx,
+		otlpmetricgrpc.WithInsecure(),
+	)
+	if err != nil {
+		return nil, err
+	}
+	
+	// Create meter provider with periodic export
+	mp := sdkmetric.NewMeterProvider(
+		sdkmetric.WithResource(res),
+		sdkmetric.WithReader(sdkmetric.NewPeriodicReader(exporter,
+			sdkmetric.WithInterval(10*time.Second),
+		)),
+	)
+	otel.SetMeterProvider(mp)
+	return mp, nil
+}
+
 func getUser(c *gin.Context, id string) string {
-	// Pass the built-in `context.Context` object from http.Request to OpenTelemetry APIs
-	// where required. It is available from gin.Context.Request.Context()
 	_, span := tracer.Start(c.Request.Context(), "getUser", oteltrace.WithAttributes(attribute.String("id", id)))
 	defer span.End()
+	
 	if id == "123" {
 		return "otelgin tester"
+	}
+	if id == "456" {
+		return "another user"
 	}
 	return "unknown"
 }
