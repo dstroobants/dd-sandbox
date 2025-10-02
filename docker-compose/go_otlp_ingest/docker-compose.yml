@@ -1,0 +1,41 @@
+services:
+  go-web-app:
+    image: go-web-app:latest
+    container_name: go-web-app
+    environment:
+      - DD_SERVICE=go-web-app
+      - DD_ENV=dev
+      - DD_VERSION=1.0.0
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://datadog-agent:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_SERVICE_NAME=go-web-app
+      - OTEL_RESOURCE_ATTRIBUTES=deployment.environment=dev,service.version=1.0.0
+      - OTEL_LOG_LEVEL=debug
+    networks:
+      - test_network
+
+  datadog-agent:
+    image: datadog/agent:latest
+    ports:
+      - "127.0.0.1:8126:8126/tcp"
+      - "127.0.0.1:4317:4317/tcp"
+    env_file:
+      - ../../.env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+    environment:
+      - DD_APM_ENABLED=true
+      - DD_APM_NON_LOCAL_TRAFFIC=true
+      - DD_LOGS_ENABLED=true
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+      - DD_DBM_PROPAGATION_MODE=full
+      - DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT=0.0.0.0:4317
+      - DD_OTLP_CONFIG_LOGS_ENABLED=true
+    networks:
+      - test_network
+
+networks:
+  test_network:
+    driver: bridge

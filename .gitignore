@@ -7,3 +7,4 @@ terraform.tfvars
 c_data
 rails_logs.txt
 python_django_mongo
+go.sum
