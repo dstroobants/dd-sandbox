@@ -1,0 +1,185 @@
+{% extends "hello/base.html" %}
+
+{% block extra_style %}
+.task-form {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+.btn {
+    background: #4facfe;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+    margin: 5px;
+}
+.btn:hover {
+    background: #3d9ae0;
+}
+.task-card {
+    background: white;
+    border: 2px solid #4facfe;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 15px 0;
+}
+.task-id {
+    background: #e9ecef;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 14px;
+}
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 15px;
+    align-items: end;
+    margin-top: 15px;
+}
+.form-group {
+    margin: 0;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+.example-section {
+    background: #fff3cd;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    border-left: 4px solid #ffc107;
+}
+.code-example {
+    background: #2c3e50;
+    color: #ecf0f1;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin: 10px 0;
+    font-family: monospace;
+    font-size: 14px;
+}
+{% endblock %}
+
+{% block content %}
+<h2>{{ title }}</h2>
+
+<div style="background: #d1ecf1; padding: 15px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #17a2b8;">
+    <p style="margin: 0; color: #0c5460;"><strong>ℹ️ About Celery:</strong> Celery is a distributed task queue that allows you to run time-consuming tasks asynchronously in the background. Tasks are sent to a message broker (Redis) and executed by worker processes.</p>
+</div>
+
+{% if task_results %}
+<div style="margin: 30px 0;">
+    <h3 style="color: #2c3e50;">✅ Tasks Submitted</h3>
+    {% for task in task_results %}
+    <div class="task-card">
+        <h4 style="color: #4facfe; margin-bottom: 10px;">{{ task.task_name }}</h4>
+        <p><strong>Task ID:</strong> <span class="task-id">{{ task.task_id }}</span></p>
+        <p><strong>Description:</strong> {{ task.description }}</p>
+        <p><strong>Status:</strong> <span style="color: #28a745;">{{ task.status }}</span></p>
+        <p style="margin-top: 10px; font-size: 14px; color: #6c757d;">Check the task status using: <code style="background: #e9ecef; padding: 2px 6px; border-radius: 3px;">GET /api/tasks/{{ task.task_id }}/</code></p>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="task-form">
+    <h3 style="margin-bottom: 20px; color: #2c3e50;">🚀 Trigger Celery Tasks</h3>
+    
+    <div style="margin-bottom: 30px;">
+        <h4 style="color: #495057;">1. Add Two Numbers</h4>
+        <p style="color: #6c757d; margin-bottom: 10px;">This task adds two numbers after a 2-second delay to simulate processing.</p>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="task_type" value="add">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="x">First Number</label>
+                    <input type="number" id="x" name="x" value="5" required>
+                </div>
+                <div class="form-group">
+                    <label for="y">Second Number</label>
+                    <input type="number" id="y" name="y" value="10" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn">Add Numbers</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <div>
+        <h4 style="color: #495057;">2. Generate Report</h4>
+        <p style="color: #6c757d; margin-bottom: 10px;">This task generates a report with database statistics after a 5-second delay.</p>
+        <form method="post" style="margin-top: 10px;">
+            {% csrf_token %}
+            <input type="hidden" name="task_type" value="report">
+            <button type="submit" class="btn">Generate Report</button>
+        </form>
+    </div>
+</div>
+
+<div class="example-section">
+    <h3 style="color: #856404; margin-bottom: 15px;">📡 API Examples</h3>
+    
+    <h4 style="color: #856404; margin-top: 20px;">Trigger a task via API:</h4>
+    <div class="code-example">
+curl -X POST http://localhost:8000/api/tasks/trigger/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "task_type": "add",
+    "x": 5,
+    "y": 10
+  }'
+    </div>
+    
+    <h4 style="color: #856404; margin-top: 20px;">Check task status:</h4>
+    <div class="code-example">
+curl http://localhost:8000/api/tasks/{task_id}/
+    </div>
+    
+    <h4 style="color: #856404; margin-top: 20px;">Generate a report:</h4>
+    <div class="code-example">
+curl -X POST http://localhost:8000/api/tasks/trigger/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "task_type": "report",
+    "report_type": "daily"
+  }'
+    </div>
+</div>
+
+<div style="background: #d4edda; padding: 20px; border-radius: 10px; margin-top: 30px; border-left: 4px solid #28a745;">
+    <h3 style="color: #155724; margin-bottom: 15px;">💡 Available Background Tasks</h3>
+    <ul style="color: #155724; margin-left: 20px;">
+        <li><strong>add_numbers(x, y)</strong> - Adds two numbers with a delay</li>
+        <li><strong>process_user_data(user_id)</strong> - Processes user data and updates last_processed timestamp</li>
+        <li><strong>generate_report(report_type)</strong> - Generates database statistics report</li>
+        <li><strong>cleanup_old_data(days)</strong> - Cleans up old records from database</li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script>
+// Auto-refresh task status (in a real app, you'd use WebSockets or polling)
+console.log('Celery Demo Page Loaded');
+</script>
+{% endblock %}
+

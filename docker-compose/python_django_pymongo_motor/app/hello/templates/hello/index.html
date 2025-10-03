@@ -1,0 +1,49 @@
+{% extends "hello/base.html" %}
+
+{% block content %}
+<h2>{{ title }}</h2>
+<p style="font-size: 18px; color: #7f8c8d; margin-bottom: 40px;">{{ message }}</p>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 30px;">
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 10px;">
+        <h3 style="margin-bottom: 15px;">📦 PyMongo (Sync)</h3>
+        <p style="margin-bottom: 20px;">Synchronous MongoDB operations using PyMongo driver</p>
+        <a href="/sync/" style="background: white; color: #667eea; padding: 10px 20px; border-radius: 5px; text-decoration: none; display: inline-block;">View Demo</a>
+    </div>
+    
+    <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; border-radius: 10px;">
+        <h3 style="margin-bottom: 15px;">⚡ Motor (Async)</h3>
+        <p style="margin-bottom: 20px;">Asynchronous MongoDB operations using Motor driver</p>
+        <a href="/async/" style="background: white; color: #f5576c; padding: 10px 20px; border-radius: 5px; text-decoration: none; display: inline-block;">View Demo</a>
+    </div>
+    
+    <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 30px; border-radius: 10px;">
+        <h3 style="margin-bottom: 15px;">🔄 Celery Tasks</h3>
+        <p style="margin-bottom: 20px;">Background task processing with Celery and Redis</p>
+        <a href="/celery/" style="background: white; color: #4facfe; padding: 10px 20px; border-radius: 5px; text-decoration: none; display: inline-block;">View Demo</a>
+    </div>
+</div>
+
+<div style="margin-top: 40px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+    <h3 style="color: #2c3e50; margin-bottom: 15px;">🔌 API Endpoints</h3>
+    <ul style="list-style: none;">
+        <li style="margin: 10px 0;"><code style="background: #e9ecef; padding: 5px 10px; border-radius: 3px;">GET/POST /api/users/</code> - User CRUD operations</li>
+        <li style="margin: 10px 0;"><code style="background: #e9ecef; padding: 5px 10px; border-radius: 3px;">GET/POST /api/posts/</code> - Blog post CRUD operations</li>
+        <li style="margin: 10px 0;"><code style="background: #e9ecef; padding: 5px 10px; border-radius: 3px;">POST /api/tasks/trigger/</code> - Trigger Celery tasks</li>
+        <li style="margin: 10px 0;"><code style="background: #e9ecef; padding: 5px 10px; border-radius: 3px;">GET /api/tasks/{task_id}/</code> - Check task status</li>
+    </ul>
+</div>
+
+<div style="margin-top: 30px; padding: 20px; background: #fff3cd; border-radius: 10px; border-left: 4px solid #ffc107;">
+    <h4 style="color: #856404; margin-bottom: 10px;">📚 Technologies Used</h4>
+    <ul style="color: #856404; margin-left: 20px;">
+        <li>Django 5.2.6 - Web framework</li>
+        <li>PyMongo 4.11.3 - Synchronous MongoDB driver</li>
+        <li>Motor 3.7.1 - Asynchronous MongoDB driver</li>
+        <li>Celery 5.5.3 - Distributed task queue</li>
+        <li>Gunicorn 23.0.0 - WSGI HTTP Server</li>
+        <li>Gevent 25.9.1 - Coroutine-based networking library</li>
+    </ul>
+</div>
+{% endblock %}
+
