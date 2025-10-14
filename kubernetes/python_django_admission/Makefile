@@ -37,17 +37,13 @@ agent-delete:
 ########################################################
 ## Django App
 ########################################################
-django-build:
+build:
 	docker build --no-cache -t django-app:latest .
-	minikube image load --overwrite django-app:latest
 
-django-deploy:
+deploy:
 	kubectl apply -f django-app-deployment.yaml
 	kubectl apply -f django-app-service.yaml
 
-django-connect:
-	minikube service django-app
-
-django-delete:
+delete:
 	kubectl delete deployment django-app
 	kubectl delete service django-app

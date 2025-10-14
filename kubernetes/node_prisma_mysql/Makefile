@@ -4,7 +4,6 @@
 ########################################################
 build:
 	docker build --no-cache -t node-prisma-app:latest .
-	minikube image load --overwrite node-prisma-app:latest
 
 build-deploy: build deploy
 
@@ -19,9 +18,6 @@ deploy-app:
 
 deploy: deploy-mysql deploy-app
 
-connect:
-	minikube service node-prisma-app
-
 delete-mysql:
 	kubectl delete deployment mysql-prisma-app
 	kubectl delete service mysql-service
@@ -31,7 +27,4 @@ delete-app:
 	kubectl delete deployment node-prisma-app
 	kubectl delete service node-prisma-app
 
-delete: delete-app delete-mysql delete-minikube-image
-
-delete-minikube-image:
-	minikube image rm node-prisma-app:latest
+delete: delete-app delete-mysql

@@ -1,6 +1,6 @@
 # How to use
 
-With minikube installed, cd into this directory: https://github.com/dstroobants/dd-sandbox/tree/main/kubernetes/node_fastify_code-origins
+With Docker installed, cd into this directory: https://github.com/dstroobants/dd-sandbox/tree/main/kubernetes/node_fastify_code-origins
 Then, run in order:
 `make node build`
 `make node-deploy`

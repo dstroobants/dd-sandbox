@@ -23,14 +23,11 @@ Check the Makefile to see the details of the commands.
 
 ### Deploy the Django boilerplate application
 
-- Build the Django image and push it to minikube locally
+- Build the Django image
 ```make django-build```
 
 - Deploy the Django app
 ```make django-deploy```
-
-- Connect to the application using `minikube service`
-```make django-connect```
 
 #### Optional
 - Delete the application deployment and service
