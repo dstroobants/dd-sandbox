@@ -47,6 +47,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.labels['tags.datadoghq.com/version']
+            - name: DD_TRACE_SAMPLING_RULES
+              value: '[{"service": "django-app", "sample_rate": 0.5}]'
           # Health checks
           livenessProbe:
             httpGet:
