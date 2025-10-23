@@ -1,0 +1,65 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - test_network
+
+  django-psycopg2:
+    env_file:
+      - ../../.env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django-psycopg2
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+      # Datadog APM settings
+      - DD_TRACE_ENABLED=true
+      - DD_VERSION=1.0.0
+      - DD_ENV=test
+      - DD_SERVICE=django-psycopg2
+      - DD_AGENT_HOST=datadog-agent
+      - DD_TRACE_AGENT_PORT=8126
+      - DD_TRACE_DEBUG=true
+      # Datadog DBM settings
+      - DD_DBM_PROPAGATION_MODE=full
+    depends_on:
+      - postgres
+    networks:
+      - test_network
+    restart: "no"
+
+  datadog-agent:
+    env_file:
+      - ../../.env
+    image: datadog/agent:latest
+    container_name: datadog_agent
+    environment:
+      - DD_APM_ENABLED=true
+      - DD_APM_NON_LOCAL_TRAFFIC=true
+      - DD_LOGS_ENABLED=true
+      - DD_LOG_LEVEL=error
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+    networks:
+      - test_network
+
+networks:
+  test_network:
+    driver: bridge

@@ -1,0 +1,4 @@
+Django==4.2.24
+ddtrace==3.10.2
+psycopg2-binary==2.9.3
+django-postgres-extra==2.0.8
