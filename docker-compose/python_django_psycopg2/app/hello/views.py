@@ -43,53 +43,40 @@ def psycopg2_demo(request):
             message = f"❌ Error creating user: {str(e)}"
     
     try:
-        # Create some sample users if they don't exist (only on first visit)
-        user_count = User.objects.count()
-            
-        if user_count == 0:
-            users_data = [
-                {'name': 'Alice', 'email': 'alice@example.com', 'age': 25},
-                {'name': 'Bob', 'email': 'bob@example.com', 'age': 30},
-                {'name': 'Charlie', 'email': 'charlie@example.com', 'age': 28},
-            ]
-            for user_data in users_data:
-                User.objects.create(**user_data)
+        # Get all users and posts first
+        users = list(User.objects.all())
+        posts = list(BlogPost.objects.all())
         
-        # Create sample blog posts if they don't exist
-        post_count = BlogPost.objects.count()
-            
-        if post_count == 0:
-            posts_data = [
-                {
-                    'title': 'Getting Started with PostgreSQL',
-                    'content': 'PostgreSQL is a powerful relational database...',
-                    'author': 'Alice',
-                    'tags': ['postgresql', 'database', 'sql'],
-                    'metadata': {'views': 100, 'likes': 15}
-                },
-                {
-                    'title': 'Django with psycopg2',
-                    'content': 'Using Django with PostgreSQL is straightforward with psycopg2...',
-                    'author': 'Bob',
-                    'tags': ['django', 'python', 'postgresql'],
-                    'metadata': {'views': 250, 'likes': 32}
-                }
-            ]
-            for post_data in posts_data:
-                # Create the post with JSON data converted to strings
-                post = BlogPost.objects.create(
-                    title=post_data['title'],
-                    content=post_data['content'],
-                    author=post_data['author'],
-                    tags=json.dumps(post_data['tags']),
-                    metadata=json.dumps(post_data['metadata'])
+        # Create sample data only if empty
+        if not users:
+            User.objects.bulk_create([
+                User(name='Alice', email='alice@example.com', age=25),
+                User(name='Bob', email='bob@example.com', age=30),
+                User(name='Charlie', email='charlie@example.com', age=28),
+            ])
+            users = list(User.objects.all())
+        
+        if not posts:
+            BlogPost.objects.bulk_create([
+                BlogPost(
+                    title='Getting Started with PostgreSQL',
+                    content='PostgreSQL is a powerful relational database...',
+                    author='Alice',
+                    tags=json.dumps(['postgresql', 'database', 'sql']),
+                    metadata=json.dumps({'views': 100, 'likes': 15})
+                ),
+                BlogPost(
+                    title='Django with psycopg2',
+                    content='Using Django with PostgreSQL is straightforward with psycopg2...',
+                    author='Bob',
+                    tags=json.dumps(['django', 'python', 'postgresql']),
+                    metadata=json.dumps({'views': 250, 'likes': 32})
                 )
+            ])
+            posts = list(BlogPost.objects.all())
         
-        # Get all users and posts
-        users = User.objects.all()
-        posts = BlogPost.objects.all()
-        user_count = User.objects.count()
-        post_count = BlogPost.objects.count()
+        user_count = len(users)
+        post_count = len(posts)
         
         context = {
             'title': 'PostgreSQL Demo',
