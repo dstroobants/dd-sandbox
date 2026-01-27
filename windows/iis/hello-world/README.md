@@ -12,7 +12,7 @@ A minimal ASP.NET Core web application designed for deployment on IIS.
 
 | Endpoint | Description |
 |----------|-------------|
-| `/` | Displays a beautiful HTML page with a random cat image that refreshes every 10 seconds (using [cataas.com](https://cataas.com)) |
+| `/` | HTML page with a random cat image that refreshes every 10 seconds (using [cataas.com](https://cataas.com)) |
 | `/health` | Returns a JSON health check response |
 
 ## Local Development
