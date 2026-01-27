@@ -1,0 +1,7 @@
+/Users/denis.stroobants/git/dd-sandbox/windows/iis/hello-world/publish/HelloWorld
+/Users/denis.stroobants/git/dd-sandbox/windows/iis/hello-world/publish/web.config
+/Users/denis.stroobants/git/dd-sandbox/windows/iis/hello-world/publish/appsettings.json
+/Users/denis.stroobants/git/dd-sandbox/windows/iis/hello-world/publish/HelloWorld.dll
+/Users/denis.stroobants/git/dd-sandbox/windows/iis/hello-world/publish/HelloWorld.deps.json
+/Users/denis.stroobants/git/dd-sandbox/windows/iis/hello-world/publish/HelloWorld.runtimeconfig.json
+/Users/denis.stroobants/git/dd-sandbox/windows/iis/hello-world/publish/HelloWorld.pdb
