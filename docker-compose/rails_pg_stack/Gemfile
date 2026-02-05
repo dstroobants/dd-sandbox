@@ -1,0 +1,135 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+ruby '3.2.2'
+
+# =============================================================================
+# All gems from uala-core.Gemfile.lock
+# =============================================================================
+
+# Rails framework
+gem 'rails', '~> 7.0.8'
+gem 'railties', '~> 7.0.8'
+
+# PostgreSQL adapter
+gem 'pg', '= 1.4.6'
+
+# Makara - FORKED VERSION with early-check-connection-blacklisting
+gem 'makara', git: 'https://github.com/uala/makara.git', branch: 'early-check-connection-blacklisting-0-5-1'
+
+# Distribute reads - connection routing layer
+gem 'distribute_reads', '~> 0.4.0'
+
+# Datadog APM
+gem 'datadog', '~> 2.27.0'
+
+# Puma web server
+gem 'puma', '~> 6.3'
+gem 'puma_worker_killer', '~> 0.3.1'
+
+# =============================================================================
+# PG-related gems that might interact with database operations
+# =============================================================================
+gem 'pg_lock', '~> 0.2'
+gem 'pg_search', '~> 2.3.5'
+
+# =============================================================================
+# ActiveRecord extensions and query-related gems
+# =============================================================================
+gem 'active_record_query_trace', '~> 1.8'
+gem 'activerecord-import', '~> 1.4'
+gem 'acts_as_list', '~> 1.0'
+gem 'after_commit_everywhere', '~> 1.3'
+gem 'bitfields', '~> 0.14'
+gem 'friendly_id', '~> 5.5'
+gem 'globalize', '~> 6.3'
+gem 'globalize-accessors', '~> 0.3'
+gem 'jsonb_accessor', '~> 1.3'
+gem 'permanent_records', '~> 5.0'
+gem 'ransack', '~> 4'
+
+# =============================================================================
+# Redis gems
+# =============================================================================
+gem 'redis', '~> 4.0'
+gem 'redis-namespace', '~> 1.8'
+gem 'redis-rails', '~> 5.0'
+gem 'redis-store', '~> 1.9'
+
+# =============================================================================
+# Sidekiq and background jobs
+# =============================================================================
+gem 'sidekiq', '~> 7.1'
+gem 'sidekiq-cron', '~> 1.10'
+gem 'sidekiq-failures', '~> 1.0'
+gem 'activejob-uniqueness', '~> 0.3'
+
+# =============================================================================
+# Error tracking and monitoring
+# =============================================================================
+gem 'sentry-rails', '~> 5.21'
+gem 'sentry-ruby', '~> 5.21'
+gem 'sentry-sidekiq', '~> 5.21'
+gem 'dogstatsd-ruby', '~> 5.3'
+gem 'prometheus_exporter', '~> 2'
+
+# =============================================================================
+# HTTP clients and external services
+# =============================================================================
+gem 'faraday', '~> 1.10'
+gem 'httparty', '>= 0.21.0'
+gem 'typhoeus', '~> 1.4'
+gem 'aws-sdk-s3', '~> 1.117'
+gem 'opensearch-ruby', '~> 2.0'
+
+# =============================================================================
+# Authentication
+# =============================================================================
+gem 'devise', '>= 4.8', '< 4.9'
+gem 'devise-token_authenticatable', '~> 1.1.0'
+gem 'warden', '~> 1.2'
+gem 'jwt', '>= 2.7.1'
+
+# =============================================================================
+# Rack middleware
+# =============================================================================
+gem 'rack', '~> 2.2.6.4'
+gem 'rack-attack', '~> 6.6.1'
+gem 'rack-cors', '~> 2.0.2'
+gem 'rack-timeout', '~> 0.6.3'
+
+# =============================================================================
+# Other potentially relevant gems
+# =============================================================================
+gem 'bootsnap', '~> 1.15'
+gem 'lograge', '~> 0.12'
+gem 'request_store', '~> 1.5'
+gem 'draper', '~> 4.0'
+gem 'interactor', '~> 3.1'
+gem 'interactor-contracts', '~> 0.3'
+gem 'aasm', '~> 5.5'
+
+# Isolator - detects non-atomic interactions within DB transactions
+gem 'isolator', '~> 0.8'
+
+# Feature flags
+gem 'unleash', '~> 4.4.2'
+
+# Money handling
+gem 'money-rails', '~> 1.15'
+
+# I18n
+gem 'i18n', '~> 1.12.0'
+gem 'rails-i18n', '~> 7.0'
+
+# =============================================================================
+# Development/Test gems that might affect behavior
+# =============================================================================
+group :development, :test do
+  gem 'byebug'
+  gem 'pry-byebug'
+  gem 'pry-rails'
+  gem 'bullet', '~> 7'
+  gem 'dotenv-rails', '~> 2.8'
+end

@@ -1,0 +1,31 @@
+# Database configuration with Makara
+
+default: &default
+  adapter: makara_postgresql
+  encoding: unicode
+  pool: 5
+  makara:
+    sticky: true
+    connections:
+      - role: primary
+        host: <%= ENV.fetch('DATABASE_HOST', 'localhost') %>
+        port: <%= ENV.fetch('DATABASE_PORT', 5432) %>
+        database: <%= ENV.fetch('DATABASE_NAME', 'repro_app_development') %>
+        username: <%= ENV.fetch('DATABASE_USER', 'postgres') %>
+        password: <%= ENV.fetch('DATABASE_PASSWORD', '') %>
+      - role: replica
+        host: <%= ENV.fetch('DATABASE_REPLICA_HOST', ENV.fetch('DATABASE_HOST', 'localhost')) %>
+        port: <%= ENV.fetch('DATABASE_REPLICA_PORT', ENV.fetch('DATABASE_PORT', 5432)) %>
+        database: <%= ENV.fetch('DATABASE_NAME', 'repro_app_development') %>
+        username: <%= ENV.fetch('DATABASE_USER', 'postgres') %>
+        password: <%= ENV.fetch('DATABASE_PASSWORD', '') %>
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+  database: repro_app_test
+
+production:
+  <<: *default
