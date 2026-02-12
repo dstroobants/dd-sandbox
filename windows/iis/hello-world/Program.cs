@@ -1,4 +1,5 @@
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddHttpClient();
 var app = builder.Build();
 
 app.MapGet("/", () => Results.Content("""
@@ -64,6 +65,26 @@ app.MapGet("/", () => Results.Content("""
         #cat-image.loading {
             opacity: 0.5;
         }
+        .cat-fact {
+            background: #f8f4ff;
+            border-left: 4px solid #764ba2;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+            text-align: left;
+            color: #444;
+            font-style: italic;
+            font-size: 0.95rem;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+        }
+        .cat-fact::before {
+            content: '\01F431';
+            font-size: 1.3rem;
+            margin-right: 10px;
+            font-style: normal;
+        }
         .timer {
             color: #764ba2;
             font-size: 1rem;
@@ -106,8 +127,9 @@ app.MapGet("/", () => Results.Content("""
         <p class="subtitle">Featuring a random cat every 10 seconds</p>
         <div class="cat-container">
             <div class="loader" id="loader"></div>
-            <img id="cat-image" src="https://cataas.com/cat?t=0" alt="Random Cat" />
+            <img id="cat-image" src="/cat?t=0" alt="Random Cat" />
         </div>
+        <div class="cat-fact" id="cat-fact">Loading cat fact...</div>
         <p class="timer">Next cat in <span id="countdown">10</span> seconds</p>
         <button class="refresh-btn" onclick="loadNewCat()">Get New Cat Now!</button>
     </div>
@@ -116,15 +138,15 @@ app.MapGet("/", () => Results.Content("""
         let countdown = 10;
         const countdownEl = document.getElementById('countdown');
         const catImage = document.getElementById('cat-image');
+        const catFact = document.getElementById('cat-fact');
         const loader = document.getElementById('loader');
 
         function loadNewCat() {
             loader.style.display = 'block';
             catImage.classList.add('loading');
             
-            // Add timestamp to prevent caching
-            const newSrc = 'https://cataas.com/cat?t=' + Date.now();
-            
+            // Fetch new cat image through our server (generates GET /cat span)
+            const newSrc = '/cat?t=' + Date.now();
             const tempImg = new Image();
             tempImg.onload = function() {
                 catImage.src = newSrc;
@@ -136,10 +158,19 @@ app.MapGet("/", () => Results.Content("""
                 loader.style.display = 'none';
             };
             tempImg.src = newSrc;
+
+            // Fetch new cat fact through our server (generates GET /fact span)
+            fetch('/fact')
+                .then(r => r.json())
+                .then(data => { catFact.textContent = data.fact; })
+                .catch(() => { catFact.textContent = 'Could not load cat fact.'; });
             
             countdown = 10;
             countdownEl.textContent = countdown;
         }
+
+        // Load initial cat fact
+        loadNewCat();
 
         // Update countdown every second
         setInterval(() => {
@@ -154,6 +185,20 @@ app.MapGet("/", () => Results.Content("""
 </body>
 </html>
 """, "text/html"));
+
+app.MapGet("/cat", async (IHttpClientFactory httpClientFactory) =>
+{
+    var httpClient = httpClientFactory.CreateClient();
+    var imageBytes = await httpClient.GetByteArrayAsync("https://cataas.com/cat?t=" + DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
+    return Results.File(imageBytes, "image/jpeg");
+});
+
+app.MapGet("/fact", async (IHttpClientFactory httpClientFactory) =>
+{
+    var httpClient = httpClientFactory.CreateClient();
+    var response = await httpClient.GetStringAsync("https://catfact.ninja/fact");
+    return Results.Content(response, "application/json");
+});
 
 app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
 
