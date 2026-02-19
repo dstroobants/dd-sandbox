@@ -31,6 +31,20 @@ BEGIN
 END
 GO
 
+-- Bulk-insert many users to generate a large dataset for testing
+DECLARE @i INT = 1;
+WHILE @i <= 5000
+BEGIN
+    INSERT INTO Users (FirstName, LastName, Email)
+    VALUES (
+        CONCAT('First', @i),
+        CONCAT('Last', @i),
+        CONCAT('user', @i, '@example.com')
+    );
+    SET @i = @i + 1;
+END
+GO
+
 -- Verify data was inserted
 SELECT COUNT(*) as UserCount FROM Users;
 GO

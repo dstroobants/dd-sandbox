@@ -1,0 +1,21 @@
+Full Code Query:
+await using var cmd = new SqlCommand(
+    "SELECT u1.Id, u1.FirstName, u1.LastName, u1.Email, u1.CreatedDate, " +
+    "u2.FirstName AS PairedFirst, u2.LastName AS PairedLast, " +
+    "CONCAT(u1.FirstName, ' ', u1.LastName, ' <-> ', u2.FirstName, ' ', u2.LastName) AS Pairing, " +
+    "DATEDIFF(SECOND, u1.CreatedDate, u2.CreatedDate) AS CreatedDiffSeconds, " +
+    "LEN(u1.Email) + LEN(u2.Email) AS CombinedEmailLength " +
+    "FROM Users u1 CROSS JOIN Users u2 ORDER BY u1.Id, u2.Id; " +
+    "SELECT COUNT(*) AS TotalUsers, COUNT(*) * COUNT(*) AS TotalPairings, " +
+    "MIN(CreatedDate) AS EarliestUser, MAX(CreatedDate) AS LatestUser, " +
+    "AVG(LEN(Email)) AS AvgEmailLength FROM Users",
+    connection);
+
+Datadog Query Split in two:
+SELECT u1.Id, u1.FirstName, u1.LastName, u1.Email, u1.CreatedDate, u2.FirstName AS PairedFirst, u2.LastName AS PairedLast, CONCAT ( u1.FirstName, ?, u1.LastName, ?, u2.FirstName, ?, u2.LastName ) AS Pairing, DATEDIFF ( SECOND, u1.CreatedDate, u2.CreatedDate ) AS CreatedDiffSeconds, LEN ( u1.Email ) + LEN ( u2.Email ) AS CombinedEmailLength FROM Users u1 CROSS JOIN Users u2 ORDER BY u1.Id, u2.Id
+Explain Plan: https://support-admin.us1.prod.dog/admin/switch_handle_get/org_id/701079?next_url=%2Fdatabases%2Fsamples%3Fquery%3Ddbm_type%253Aplan%2520source%253Asqlserver%2520PairedFirst%26agg_m%3Dcount%26agg_m_source%3Dbase%26agg_t%3Dcount%26dbPanels%3D%255B%257B%2522t%2522%253A%2522dbSamplePanel%2522%252C%2522event%2522%253A%2522AwAAAZx1o3ThXBklVQAAABhBWngxbzNqSEFBRGxXckhsYXhZckFBQUEAAAAkZjE5Yzc1YTMtOWQ1NC00NmUyLTkwNTItZDQ2YzA2Njc5NGIzAAAEKQ%2522%257D%255D%26dbType%3DSQLServer%26fromUser%3Dfalse%26spanID%3D7636680983455754752%26start%3D1771496809942%26end%3D1771500409942%26paused%3Dfalse
+Query Sample: https://support-admin.us1.prod.dog/admin/switch_handle_get/org_id/701079?next_url=%2Fdatabases%2Fsamples%3Fquery%3Ddbm_type%253Aactivity%2520source%253Asqlserver%2520PairedFirst%26agg_m%3Dcount%26agg_m_source%3Dbase%26agg_t%3Dcount%26dbPanels%3D%255B%257B%2522t%2522%253A%2522dbSamplePanel%2522%252C%2522event%2522%253A%2522AwAAAZx1p1pc5dAwYQAAABhBWngxcDExM0FBQzA2Y2t5TDBGQUFBQUEAAAAkZjE5Yzc1YTctNWE1Yy00MWZjLWI3ZDQtODI3ZjIzZjNkYTNhAAAAAg%2522%257D%255D%26dbType%3DSQLServer%26fromUser%3Dfalse%26spanID%3D7636680983455754752%26start%3D1771496809942%26end%3D1771500409942%26paused%3Dfalse
+
+SELECT COUNT ( * ) AS TotalUsers, COUNT ( * ) * COUNT ( * ) AS TotalPairings, MIN ( CreatedDate ) AS EarliestUser, MAX ( CreatedDate ) AS LatestUser, AVG ( LEN ( Email ) ) AS AvgEmailLength FROM Users
+Explain Plan: https://support-admin.us1.prod.dog/admin/switch_handle_get/org_id/701079?next_url=%2Fdatabases%2Fsamples%3Fquery%3Ddbm_type%253Aplan%2520source%253Asqlserver%2520TotalPairings%26agg_m%3Dcount%26agg_m_source%3Dbase%26agg_t%3Dcount%26dbPanels%3D%255B%257B%2522t%2522%253A%2522dbSamplePanel%2522%252C%2522event%2522%253A%2522AwAAAZx1oopw_X4mKwAAABhBWngxb28zckFBQThxQkRhQ2VlU0FBQUEAAAAkZjE5Yzc1YTItYjJmOC00Yjk2LWIxNmEtMzI3MTVmM2E4MTQ1AAADQw%2522%257D%255D%26dbType%3DSQLServer%26fromUser%3Dfalse%26spanID%3D7636680983455754752%26start%3D1771496809942%26end%3D1771500409942%26paused%3Dfalse
+Query Sample: https://support-admin.us1.prod.dog/admin/switch_handle_get/org_id/701079?next_url=%2Fdatabases%2Fsamples%3Fquery%3Ddbm_type%253Aactivity%2520source%253Asqlserver%2520TotalPairings%26agg_m%3Dcount%26agg_m_source%3Dbase%26agg_t%3Dcount%26dbPanels%3D%255B%257B%2522t%2522%253A%2522dbSamplePanel%2522%252C%2522event%2522%253A%2522AwAAAZx1kh_cZPfy6QAAABhBWngxa2lic0FBRGoxVlllZjB5V0FBQUEAAAAkZjE5Yzc1OTItMWZkYy00ZWUxLWI1OTctNzEzMDRiOTFlMWUyAAAAAA%2522%257D%255D%26dbType%3DSQLServer%26fromUser%3Dfalse%26spanID%3D12796473739642887371%26start%3D1771496809942%26end%3D1771500409942%26paused%3Dfalse

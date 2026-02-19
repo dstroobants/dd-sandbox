@@ -52,18 +52,37 @@ while (true)
 
 static async Task RunSelectAllUsers(SqlConnection connection, int queryNumber)
 {
-    Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] Query #{queryNumber} - SELECT all users");
+    Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] Query #{queryNumber} - SELECT all users (batch)");
 
-    await using var cmd = new SqlCommand("SELECT Id, FirstName, LastName, Email, CreatedDate FROM Users ORDER BY Id", connection);
+    await using var cmd = new SqlCommand(
+        "SELECT u1.Id, u1.FirstName, u1.LastName, u1.Email, u1.CreatedDate, " +
+        "u2.FirstName AS PairedFirst, u2.LastName AS PairedLast, " +
+        "CONCAT(u1.FirstName, ' ', u1.LastName, ' <-> ', u2.FirstName, ' ', u2.LastName) AS Pairing, " +
+        "DATEDIFF(SECOND, u1.CreatedDate, u2.CreatedDate) AS CreatedDiffSeconds, " +
+        "LEN(u1.Email) + LEN(u2.Email) AS CombinedEmailLength " +
+        "FROM Users u1 CROSS JOIN Users u2 ORDER BY u1.Id, u2.Id; " +
+        "SELECT COUNT(*) AS TotalUsers, COUNT(*) * COUNT(*) AS TotalPairings, " +
+        "MIN(CreatedDate) AS EarliestUser, MAX(CreatedDate) AS LatestUser, " +
+        "AVG(LEN(Email)) AS AvgEmailLength FROM Users",
+        connection);
     await using var reader = await cmd.ExecuteReaderAsync();
 
     int count = 0;
     while (await reader.ReadAsync())
     {
         count++;
-        Console.WriteLine($"  User {count}: {reader["FirstName"]} {reader["LastName"]} ({reader["Email"]}) - Created: {reader["CreatedDate"]}");
     }
-    Console.WriteLine($"  Total: {count} user(s)\n");
+    Console.WriteLine($"  Fetched {count} pairing(s) from cross join");
+
+    if (await reader.NextResultAsync())
+    {
+        if (await reader.ReadAsync())
+        {
+            Console.WriteLine($"  Total users: {reader["TotalUsers"]}, Pairings: {reader["TotalPairings"]}, " +
+                $"Earliest: {reader["EarliestUser"]}, Latest: {reader["LatestUser"]}, " +
+                $"Avg email length: {reader["AvgEmailLength"]}\n");
+        }
+    }
 }
 
 static async Task RunSelectUserById(SqlConnection connection, int queryNumber)
