@@ -41,9 +41,9 @@ build:
 	docker build --no-cache -t django-app:latest .
 
 deploy:
-	kubectl apply -f django-app-deployment.yaml
-	kubectl apply -f django-app-service.yaml
+	kubectl -n dev apply -f django-app-deployment.yaml
+	kubectl -n dev apply -f django-app-service.yaml
 
 delete:
-	kubectl delete deployment django-app
-	kubectl delete service django-app
+	kubectl -n dev delete deployment django-app
+	kubectl -n dev delete service django-app

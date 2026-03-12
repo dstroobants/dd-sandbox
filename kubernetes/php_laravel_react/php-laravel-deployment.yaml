@@ -19,9 +19,7 @@ spec:
         tags.datadoghq.com/env: dev
         tags.datadoghq.com/service: php-laravel
         tags.datadoghq.com/version: "1234"
-        admission.datadoghq.com/enabled: "true"
       annotations:
-        admission.datadoghq.com/php-lib.version: v1.11.0
         admission.datadoghq.com/apm-inject.debug: "true"
     spec:
       containers:

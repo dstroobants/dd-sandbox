@@ -3,9 +3,9 @@ build:
 	docker build --no-cache -t rails-app-dev:latest .
 
 deploy:
-	kubectl apply -f deployment.yaml
-	kubectl apply -f service.yaml
+	kubectl -n dev apply -f deployment.yaml
+	kubectl -n dev apply -f service.yaml
 
 delete:
-	kubectl delete deployment rails-app
-	kubectl delete service rails-app
+	kubectl -n dev delete deployment rails-app
+	kubectl -n dev delete service rails-app

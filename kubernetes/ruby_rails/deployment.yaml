@@ -16,9 +16,7 @@ spec:
         tags.datadoghq.com/env: "dev"
         tags.datadoghq.com/service: "rails-app"
         tags.datadoghq.com/version: "1234"
-        admission.datadoghq.com/enabled: "true"
       annotations:
-        admission.datadoghq.com/ruby-lib.version: v2.18.0
         admission.datadoghq.com/apm-inject.debug: "true"
     spec:
       containers:

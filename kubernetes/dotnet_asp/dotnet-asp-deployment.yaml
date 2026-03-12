@@ -19,9 +19,7 @@ spec:
         tags.datadoghq.com/env: dev
         tags.datadoghq.com/service: dotnet-asp
         tags.datadoghq.com/version: "1234"
-        admission.datadoghq.com/enabled: "true"
       annotations:
-        admission.datadoghq.com/dotnet-lib.version: v3.22.0
         admission.datadoghq.com/apm-inject.debug: "true"
     spec:
       containers:
