@@ -1,0 +1,16 @@
+**/.DS_Store
+**/__pycache__
+**/.venv
+**/.git
+**/.gitignore
+**/.vscode
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/*.sqlite3
+**/.env
+**/docker-compose*
+**/Dockerfile*
+**/.dockerignore
+LICENSE
+README.md
